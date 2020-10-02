@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <title>OGR^2</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" media="screen, projection" />
+    <link rel="stylesheet" type="text/css" href="/static/css/detail.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/66d4b90c85.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">    
+                </div>     
+                <span style="margin:0 0 0 auto;">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'top' user %}">Home<span
+                                            class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'my_page' user %}">マイページ</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" href="{% url 'create_log' %}">記録の追加</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </button>
+                </span>
+                <a class="navbar-brand" href="{% url 'top' user %}">OGR^2</a>
+            </div>
+        </div>
+    </nav>
+
+    <p style="text-align:right;">こんにちは {{ user.username }}さん!
+        <a class="navbar-text" href="{% url 'my_page' user %}">my_page</a>
+        <a class="navbar-text" href="{% url 'logout' %}">logout</a>
+    </p>
+    <br />
+
+    <table class="table table-striped">
+        <tr>
+            <th>解決済み</th>
+            <th>日付</th>
+            <th>タイトル</th>
+            <th>相手</th>
+            <th>金額</th>
+            <th>借りたor貸した</th>
+        </tr>
+        {% if ogr_list %}
+            {% for ogr in ogr_list %}
+                <tr>
+                    <td> <i class="fas fa-check-square"></i></td>
+                    <td>{{ ogr.date }}</td>
+                    <td><a href="{% url 'detail' ogr.id %}">{{ ogr.title }}</a></td>
+                    <td>{{ ogr.friends_name.name }}</td>
+                    <td>{{ ogr.money }}円</td>
+                    {% if ogr.money > 0 %}
+                    <td>貸した</td>
+                    {% else %}
+                    <td>借りた</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+        </table>    
+        <br/>
+        <p>記録がありません</p>
+        {% endif %}
+        
+      
+    
+    <br/>
+    <br/>
+    <a class="btn btn-outline-primary" href="{% url 'create_log' %}">記録の追加</a>
+
+</body>
+</html>
