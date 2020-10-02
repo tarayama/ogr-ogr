@@ -18,6 +18,7 @@ decorator==4.4.2
 defusedxml==0.6.0
 dj-database-url==0.5.0
 Django==3.0.3
+django-heroku==0.3.1
 entrypoints==0.3
 factor-analyzer==0.3.2
 folium @ file:///home/conda/feedstock_root/build_artifacts/folium_1588861378954/work
@@ -67,6 +68,7 @@ Pillow==7.2.0
 plotly==4.9.0
 prometheus-client==0.8.0
 prompt-toolkit==3.0.5
+psycopg2==2.8.6
 PuLP==1.6.8
 pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
 pyfpgrowth==1.0
