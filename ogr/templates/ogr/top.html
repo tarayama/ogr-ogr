@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" media="screen, projection" />
     <link rel="stylesheet" type="text/css" href="/static/css/detail.css" />
     <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/66d4b90c85.js" crossorigin="anonymous"></script>
 
@@ -17,8 +18,8 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <div class="navbar-header">
-                <div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">    
-                </div>     
+                <div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+                </div>
                 <span style="margin:0 0 0 auto;">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,21 +49,91 @@
         <a class="navbar-text" href="{% url 'my_page' user %}">my_page</a>
         <a class="navbar-text" href="{% url 'logout' %}">logout</a>
     </p>
-    <br />
-    <p>まだ貸し借りのしたことない方の記録を追加する場合は<a href="{% url 'addfriend' %}">こちら</a></p>
+    <h3>貸し借り記録</h3>
+    <main class="p-3">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a href="#card11" class="nav-link active">Card</a>
+        </li>
+        <li class="nav-item">
+            <a href="#table11" class="nav-link">Table</a>
+        </li>
+    </ul>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <tr>
-                <th class="text-nowrap">解決済み</th>
-                <th class="text-nowrap">日付</th>
-                <th class="text-nowrap">タイトル</th>
-                <th class="text-nowrap">相手</th>
-                <th class="text-nowrap">金額</th>
-                <th class="text-nowrap">借りたor貸した</th>
-            </tr>
-            {% if ogr_list %}
-                {% for ogr in ogr_list %}
+    <div class="tab-content">
+        <div id="card11" class="tab-pane active">
+            <div class="container">
+                <div class="row">
+                    {% if ogr_list %}
+                    {% for ogr in ogr_list %}
+                    <div class="col-xl col-lg col-md col-sm col-xs">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        {{ ogr.title }}
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <h5 class="card-title"></h5>
+                                    <p class="card-text">{{ ogr.date }}に</p>
+                                    <p class="card-text">{{ ogr.friends_name.name }}さんに</p>
+                                    {% if ogr.money > 0 %}
+                                    <p class="card-text">{{ ogr.money }}円貸した</p>
+                                    {% else %}
+                                    <p class="card-text">{{ ogr.money }}円借りた</p>
+                                    {% endif %}
+
+                                    <a href="{% url 'detail' ogr.id %}" class="btn btn-primary">詳細</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-xl col-lg col-md col-sm col-xs">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                友達リスト
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ ogr.title }}</h5>
+                                <p class="card-text">{{ ogr.date }}さん</p>
+                                <p class="card-text">{{ ogr.friends_name.name }}</p>
+                                <p class="card-text">{{ ogr.money }}円</p>
+                                {% if ogr.money > 0 %}
+                                <p class="card-text">{{ ogr.money }}円貸した</p>
+                                {% else %}
+                                <p class="card-text">{{ ogr.money }}円借りた</p>
+                                {% endif %}
+
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-text">いまだ貸し借りのしたことある人はいません</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div id="table11" class="tab-pane">
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <th class="text-nowrap">解決済み</th>
+                        <th class="text-nowrap">日付</th>
+                        <th class="text-nowrap">タイトル</th>
+                        <th class="text-nowrap">相手</th>
+                        <th class="text-nowrap">金額</th>
+                        <th class="text-nowrap">借りたor貸した</th>
+                    </tr>
+                    {% if ogr_list %}
+                    {% for ogr in ogr_list %}
                     <tr>
                         <td> <i class="fas fa-check-square"></i></td>
                         <td>{{ ogr.date }}</td>
@@ -75,20 +146,23 @@
                         <td>借りた</td>
                         {% endif %}
                     </tr>
-                {% endfor %}
+                    {% endfor %}
                 </table>
-            {% else %}
-        </table>
+                {% else %}
+                </table>
+            </div>
+            <br />
+            <p>記録がありません</p>
+            {% endif %}
+        </div>
     </div>
-        <br/>
-        <p>記録がありません</p>
-        {% endif %}
-        
-      
+</main>
+
+
+
     
-    <br/>
-    <br/>
-    <a class="btn btn-outline-primary" href="{% url 'create_log' %}">記録の追加</a>
+    <a class="btn btn-outline-primary" href="{% url 'create_log' %}">記録の追加</a><br/><br/>
 
 </body>
+
 </html>

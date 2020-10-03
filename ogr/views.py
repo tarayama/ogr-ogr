@@ -17,11 +17,25 @@ def top(request, user):
     context = {'ogr_list': ogr_list }
     return render(request, 'ogr/top.html', context)
 
+def update(request, ogr_id):
+    friend_list = Friend.objects.filter(user=request.user)
+    ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
+    context = {
+        'ogr_detail': ogr_detail,
+        'friend_list' : friend_list }
+    friend = ogr_detail.friends_name
+    #if request.method == 'POST':
+        
+    return render(request, 'ogr/detail.html',context)
+
 
 def my_page(request, user):
     #マイページ
     ogr_list = Ogr_ogr.objects.filter(user=request.user)
-    context = {'ogr_list': ogr_list }
+    friend_list = Friend.objects.filter(user=request.user)
+    context = {
+        'ogr_list' : ogr_list,
+        'friend_list' : friend_list}
     return render(request, 'ogr/my_page.html', context)
 
 def addfriend(request):
@@ -52,9 +66,10 @@ def create_log(request):
                     name = request.POST['friends_name']
                 )
                 new_friend.save()
+                friend = new_friend
                 break
             elif person.name == request.POST['friends_name']:
-                friend == person
+                friend = person
         b_or_l_Log = Ogr_ogr(
             user = request.user,
             date = request.POST['date'],

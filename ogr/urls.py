@@ -8,5 +8,6 @@ urlpatterns = [
     path('addfriend', views.addfriend, name='addfriend'),
     path('create', views.create_log, name='create_log'),  #log作成画面
     path('detail/<int:ogr_id>', views.detail, name='detail'),
+    path('update/<int:ogr_id>', views.update, name='delete'),
     path('delete/<int:ogr_id>', views.delete, name='delete'),
 ]

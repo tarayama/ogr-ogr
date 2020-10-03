@@ -29,10 +29,48 @@
             </div>
         </nav>
         <br/>
-        <h3>{{ user.username }}さんのマイページです</h3>
-        <p>人ごとの貸し借り記録</p>
-        <p>アカウントの設定</p>
+        <h3>{{ user.username }}さんのマイページです</h3><br/><br/>
+        <div class="container">
+            <div class="row">	
+                <div class="col-xl col-lg col-md col-sm col-xs"> 
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            友達リスト
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">一覧</h5>
+                            {% if friend_list %}
+                                {% for peron in friend_list %}
+                                    <p class="card-text">{{  person.friends_name.name  }}さん</p>
+                                {% endfor %}
+                            
+                            {% else %}
+                                <p class="card-text">いまだ貸し借りのしたことある人はいません</p>
+                            {% endif %}
+                        
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-xl col-lg col-md col-sm col-xs"> 
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            アカウント設定
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">設定一覧</h5>
+                                <p class="card-text">パスワードの変更</p>
+                                <p class="card-text">アカウントの削除</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </br>
         
-        <a href="{% url 'index' %}">ホームに戻る</a>
+        
+        <a class="btn btn-outline-info" href="{% url 'index' %}">ホームに戻る</a>
     </body>
 </html>
