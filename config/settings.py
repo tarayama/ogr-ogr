@@ -26,10 +26,7 @@ SECRET_KEY = 'xcm!a&jjni_+^yow)srd(b@*v05=x$vddx*2d3tu*#795-ytjw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+
 
 
 # Application definition
@@ -148,5 +145,10 @@ LOGOUT_REDIRECT_URL = 'index'
 
 if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
-    import django_heroku #追加
-    django_heroku.settings(locals()) #追加
+    import django_heroku
+    django_heroku.settings(locals())
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

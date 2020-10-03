@@ -57,11 +57,11 @@
             <br/>
             {% if ogr.money > 0 %}
             <h6 class="card-subtitle">
-                {{ ogr_detail.friends_name }}さんに{{ ogr_detail.money }}円貸しています
+                {{ ogr_detail.friends_name.name }}さんに{{ ogr_detail.money }}円貸しています
             </h6>
             {% else %}
             <h6 class="card-subtitle">
-                {{ ogr_detail.friends_name }}さんに{{ ogr_detail.money }}円借りています
+                {{ ogr_detail.friends_name.name }}さんに{{ ogr_detail.money }}円借りています
             </h6>
             {% endif %}
             <br/>
