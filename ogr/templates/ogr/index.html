@@ -13,56 +13,50 @@
 </head>
 
 <body>
-    <div class="container">
-		<div class="row">	
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">    
-                        </div>     
-                        <span style="margin:0 0 0 auto;">
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                                <div class="collapse navbar-collapse" id="navbarNav">
-                                    <ul class="navbar-nav">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{% url 'index' %}">Home<span
-                                                    class="sr-only">(current)</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{% url 'login' %}">ログイン</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link disabled" href="{% url 'signup' %}">新規登録</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </button>
-                        </span>
-                        <a class="navbar-brand" href="{% url 'index' %}">OGR^2</a>
-                    </div>
-                </div>
-            </nav>
-            {% if user.is_authenticated %}
-            <br/>
-            読み込み中です
-            自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a>を選択してください
-            {% else %}
-            <br />
-            <h3>金銭の貸し借りをここで管理しよう</h3>
-            <br />
-            <p>普段飲み会などでおごったりおごられたりしたことって恩義を感じながらもなあなあに忘れてしまったりしていませんか？</p>
-            <p>そういうこととはもうおさらばしましょう</p>
-            <p>このアプリでは、そういった貸し借りを記録することができます！</p>
-            <br />
-            <br />
-            <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a>
-            <p>アカウント登録は<a href="{% url 'signup' %}">こちら</a></p>
-            {% endif %}
-            <br />
+    
+    <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'index' %}">OGR^2</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsogr" aria-controls="navbarsogr" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarsogr">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Home<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">ログイン</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">新規登録</a>
+                </li>
+            </ul>
         </div>
-    </div>
+    </nav>
+
+
+
+    
+    {% if user.is_authenticated %}
+    <br/>
+    <p>読み込み中です</p>
+    <p>自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a>を選択してください</p>
+    {% else %}
+    <br />
+    <br />
+    <br />
+    <h3>金銭の貸し借りをここで管理しよう</h3>
+    <br />
+    <p>普段飲み会などでおごったりおごられたりしたことって恩義を感じながらもなあなあに忘れてしまったりしていませんか？</p>
+    <p>そういうこととはもうおさらばしましょう</p>
+    <p>このアプリでは、そういった貸し借りを記録することができます！</p>
+    <br />
+    <br />
+    <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a>
+    <p>アカウント登録は<a href="{% url 'signup' %}">こちら</a></p>
+    {% endif %}
+    <br />
+
 </body>
 
 </html>
