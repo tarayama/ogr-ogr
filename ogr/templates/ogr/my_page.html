@@ -11,29 +11,27 @@
 
     </head>
     <body>
-        <div class="container">
-            <nav class="navbar navbar-dark bg-dark">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </div>
-                        <a class="navbar-brand" href="{% url 'top' user %}">OGR^2</a>
-                        <a class="navbar-text" href="#">人ごとの貸し借り記録</a>
-                        <a class="navbar-text" href="{% url 'mypage' user %}">設定</a>
-                        <a class="navbar-text" href="{% url 'logout' %}">logout</a>
-                        
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <div class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </div>
+                    <a class="navbar-brand" href="{% url 'top' user %}">OGR^2</a>
+                    <a class="navbar-text" href="#">人ごとの貸し借り記録</a>
+                    <a class="navbar-text" href="{% url 'mypage' user %}">設定</a>
+                    <a class="navbar-text" href="{% url 'logout' %}">logout</a>
+                    
                 </div>
-            </nav>
-            <br/>
-            <h3>{{ user.username }}さんのマイページです</h3>
-            <p>人ごとの貸し借り記録</p>
-            <p>アカウントの設定</p>
-            
-            <a href="{% url 'index' %}">ホームに戻る</a>
-        </div>
+            </div>
+        </nav>
+        <br/>
+        <h3>{{ user.username }}さんのマイページです</h3>
+        <p>人ごとの貸し借り記録</p>
+        <p>アカウントの設定</p>
+        
+        <a href="{% url 'index' %}">ホームに戻る</a>
     </body>
 </html>
