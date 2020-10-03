@@ -51,33 +51,35 @@
     <br />
     <p>まだ貸し借りのしたことない方の記録を追加する場合は<a href="{% url 'addfriend' %}">こちら</a></p>
 
-    <table class="table table-striped">
-        <tr>
-            <th>解決済み</th>
-            <th>日付</th>
-            <th>タイトル</th>
-            <th>相手</th>
-            <th>金額</th>
-            <th>借りたor貸した</th>
-        </tr>
-        {% if ogr_list %}
-            {% for ogr in ogr_list %}
-                <tr>
-                    <td> <i class="fas fa-check-square"></i></td>
-                    <td>{{ ogr.date }}</td>
-                    <td><a href="{% url 'detail' ogr.id %}">{{ ogr.title }}</a></td>
-                    <td>{{ ogr.friends_name.name }}</td>
-                    <td>{{ ogr.money }}円</td>
-                    {% if ogr.money > 0 %}
-                    <td>貸した</td>
-                    {% else %}
-                    <td>借りた</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </table>
-        {% else %}
-        </table>    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <tr>
+                <th class="text-nowrap">解決済み</th>
+                <th class="text-nowrap">日付</th>
+                <th class="text-nowrap">タイトル</th>
+                <th class="text-nowrap">相手</th>
+                <th class="text-nowrap">金額</th>
+                <th class="text-nowrap">借りたor貸した</th>
+            </tr>
+            {% if ogr_list %}
+                {% for ogr in ogr_list %}
+                    <tr>
+                        <td> <i class="fas fa-check-square"></i></td>
+                        <td>{{ ogr.date }}</td>
+                        <td><a href="{% url 'detail' ogr.id %}">{{ ogr.title }}</a></td>
+                        <td>{{ ogr.friends_name.name }}</td>
+                        <td>{{ ogr.money }}円</td>
+                        {% if ogr.money > 0 %}
+                        <td>貸した</td>
+                        {% else %}
+                        <td>借りた</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </table>
+            {% else %}
+        </table>
+    </div>
         <br/>
         <p>記録がありません</p>
         {% endif %}
