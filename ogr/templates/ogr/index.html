@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>OGR^2</title>
+    <meta name="viewport" content="initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" media="screen, projection" />
     <link rel="stylesheet" type="text/css" href="/static/css/detail.css" />
     <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
@@ -13,10 +14,6 @@
 </head>
 
 <body>
-    <div class="container">
-		<div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12"> 
-
     <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'index' %}">OGR^2</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,32 +34,30 @@
           </ul>
           
         </div>
-      </nav>
-    
-
-    
-                {% if user.is_authenticated %}
-                <br/>
-                <p>読み込み中です</p>
-                <p>自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a>を選択してください</p>
-                {% else %}
-                <br />
-                <br />
-                <br />
-                <h3>金銭の貸し借りをここで管理しよう</h3>
-                <br />
-                <p>普段飲み会などでおごったりおごられたりしたことって恩義を感じながらもなあなあに忘れてしまったりしていませんか？</p>
-                <p>そういうこととはもうおさらばしましょう</p>
-                <p>このアプリでは、そういった貸し借りを記録することができます！</p>
-                <br />
-                <br />
-                <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a>
-                <p>アカウント登録は<a href="{% url 'signup' %}">こちら</a></p>
-                {% endif %}
-                <br />
-            </div>
-        </div>
+    </nav>
+    <div class="container">
+      
+        {% if user.is_authenticated %}
+        <br/>
+        読み込み中です<<br/>
+        自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a><<br/>>
+        {% else %}
+        <br />
+        <br />
+        <br />
+        <h3>金銭の貸し借りをここで管理しよう</h3>
+        <br />
+        普段飲み会などでおごったりおごられたりしたことって恩義を感じながらもなあなあに忘れてしまったりしていませんか？<br/><br/>
+        そういうこととはもうおさらばしましょう<br/><br/>
+        このアプリでは、そういった貸し借りを記録することができます！<br/>
+        <br />
+        <br />
+        <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a>
+        <p>アカウント登録は<a href="{% url 'signup' %}">こちら</a></p>
+        {% endif %}
+        <br />
     </div>
+    
 
 </body>
 
