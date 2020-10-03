@@ -13,6 +13,10 @@
 </head>
 
 <body>
+    <div class="container">
+		<div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12"> 
+
     <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'index' %}">OGR^2</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,25 +41,28 @@
     
 
     
-    {% if user.is_authenticated %}
-    <br/>
-    <p>読み込み中です</p>
-    <p>自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a>を選択してください</p>
-    {% else %}
-    <br />
-    <br />
-    <br />
-    <h3>金銭の貸し借りをここで管理しよう</h3>
-    <br />
-    <p>普段飲み会などでおごったりおごられたりしたことって恩義を感じながらもなあなあに忘れてしまったりしていませんか？</p>
-    <p>そういうこととはもうおさらばしましょう</p>
-    <p>このアプリでは、そういった貸し借りを記録することができます！</p>
-    <br />
-    <br />
-    <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a>
-    <p>アカウント登録は<a href="{% url 'signup' %}">こちら</a></p>
-    {% endif %}
-    <br />
+                {% if user.is_authenticated %}
+                <br/>
+                <p>読み込み中です</p>
+                <p>自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a>を選択してください</p>
+                {% else %}
+                <br />
+                <br />
+                <br />
+                <h3>金銭の貸し借りをここで管理しよう</h3>
+                <br />
+                <p>普段飲み会などでおごったりおごられたりしたことって恩義を感じながらもなあなあに忘れてしまったりしていませんか？</p>
+                <p>そういうこととはもうおさらばしましょう</p>
+                <p>このアプリでは、そういった貸し借りを記録することができます！</p>
+                <br />
+                <br />
+                <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a>
+                <p>アカウント登録は<a href="{% url 'signup' %}">こちら</a></p>
+                {% endif %}
+                <br />
+            </div>
+        </div>
+    </div>
 
 </body>
 
