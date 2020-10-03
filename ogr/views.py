@@ -43,6 +43,7 @@ def create_log(request):
     #記録の作成
     friend_list = Friend.objects.filter(user=request.user)
     context = {'friend_list': friend_list }
+    friend = request.user
     if request.method == 'POST':
         for person in friend_list:
             if person.name != request.POST['friends_name']:
@@ -52,11 +53,13 @@ def create_log(request):
                 )
                 new_friend.save()
                 break
+            elif person.name == request.POST['friends_name']:
+                friend == person
         b_or_l_Log = Ogr_ogr(
             user = request.user,
             date = request.POST['date'],
             title = request.POST['title'],
-            friends_name = request.POST['friends_name'],
+            friends_name = friend,
             money = request.POST['money'],
             detail = request.POST['detail'],
         )
