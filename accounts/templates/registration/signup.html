@@ -34,9 +34,11 @@
         {% endif %}
         <form method="post">
         {% csrf_token %}
-        <table class="table table-sm mx-auto w-75">
-            {{ form.as_table }}
-        </table>
+        <div class="table-responsive">
+            <table class="table table-sm mx-auto w-75">
+                {{ form.as_table }}
+            </table>
+        </div>
         <input class="btn btn-primary" type="submit" value="Sign up" />
         
         </form>

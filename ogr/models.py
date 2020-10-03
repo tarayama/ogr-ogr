@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from datetime import datetime
+from datetime import date
 
 # Create your models here.
 class Friend(models.Model):
@@ -16,7 +16,7 @@ class Ogr_ogr(models.Model):
     user = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE)
-    date = models.DateField(default=datetime.today())
+    date = models.DateField(default=date.today())
     friends_name = models.ForeignKey(
         Friend,
         on_delete=models.CASCADE)
