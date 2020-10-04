@@ -35,7 +35,7 @@
                                     <a class="nav-link" href="{% url 'my_page' user %}">マイページ</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link disabled" href="{% url 'create_log' %}">記録の追加</a>
+                                    <a class="nav-link" href="{% url 'create_log' %}">記録の追加</a>
                                 </li>
                             </ul>
                         </div>
@@ -67,7 +67,7 @@
                     <div class="row">
                         {% if ogr_list %}
                         {% for ogr in ogr_list %}
-                        <div class="col-xl col-lg col-md col-sm col-xs">
+                        <div class="col-xl col-lg col-md col-sm col-xs mx-auto">
                             <div class="card" style="width: 18rem;">
                                 <div class="card-header" id="headingOne">
                                     <h5 class="mb-0">
@@ -134,7 +134,11 @@
                         {% if ogr_list %}
                         {% for ogr in ogr_list %}
                         <tr>
+                            {% if ogr.solution == 1 %}
                             <td> <i class="fas fa-check-square"></i></td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
                             <td>{{ ogr.date }}</td>
                             <td><a href="{% url 'detail' ogr.id %}">{{ ogr.title }}</a></td>
                             <td>{{ ogr.friends_name.name }}</td>

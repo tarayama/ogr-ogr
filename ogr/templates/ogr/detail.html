@@ -58,20 +58,35 @@
             <br/>
             {% if ogr.money > 0 %}
             <h6 class="card-subtitle">
-                {{ ogr_detail.friends_name.name }}さんに{{ ogr_detail.money }}円貸しています
+                {{ ogr_detail.date }}に{{ ogr_detail.friends_name.name }}さんに{{ ogr_detail.money }}円貸しています
             </h6>
             {% else %}
             <h6 class="card-subtitle">
-                {{ ogr_detail.friends_name.name }}さんに{{ ogr_detail.money }}円借りています
+                {{ ogr_detail.date }}に{{ ogr_detail.friends_name.name }}さんに{{ ogr_detail.money }}円借りています
             </h6>
             {% endif %}
             <br/>
             <p class="card-text">{{ogr_detail.detail}}</p>
-            <a href="#" class="btn btn-primary">解決済み <i class="fas fa-check-square"></i></a>
+            
+            {% if ogr_detail.solution == 1 %}
+            <form action="{% url 'detail' ogr_detail.id %}" class="form-inline my-2 my-lg-0 mx-auto" method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary mx-auto" name="solution" value="0" type="submit">解決済み <i class="fas fa-check-square"></i></button>
+            </form>
+            {% else %}
+            <form action="{% url 'detail' ogr_detail.id %}" class="form-inline my-2 my-lg-0 mx-auto" method="post">
+                {% csrf_token %}
+                <button class="btn btn-outline-success my-2 my-sm-0 mx-auto" name="solution" value="1" type="submit">未解決</button>
+            </form>
+            {% endif %}
+            <br/>
+            <br/>
         </div>
         <div class="card-footer">
-            <a class="btn btn-danger" href="{% url 'delete' ogr_detail.id %}">削除</a>
             <a class="btn btn-info" href="{% url 'top' user %}">ホームに戻る</a>
+            <a href="{% url 'edit' ogr_detail.id %}" class="btn btn-primary">編集</a>
+            <a class="btn btn-danger" href="{% url 'delete' ogr_detail.id %}">削除</a>
+            
         </div>
     </div>
     <br>

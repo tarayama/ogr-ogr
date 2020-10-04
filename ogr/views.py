@@ -17,16 +17,34 @@ def top(request, user):
     context = {'ogr_list': ogr_list }
     return render(request, 'ogr/top.html', context)
 
-def update(request, ogr_id):
+def edit(request, ogr_id):
     friend_list = Friend.objects.filter(user=request.user)
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
     context = {
         'ogr_detail': ogr_detail,
         'friend_list' : friend_list }
     friend = ogr_detail.friends_name
-    #if request.method == 'POST':
+    if request.method == 'POST':
+        #for person in friend_list:
+        #    if person.name != request.POST['friends_name']:
+        #        new_friend = Friend(
+        #            user = request.user,
+        #            name = request.POST['friends_name']
+        #        )
+        #        new_friend.save()
+        #        friend = new_friend
+        #        break
+        #    elif person.name == request.POST['friends_name']:
+        #        friend = person
+        ogr_detail.date = request.POST['date']
+        ogr_detail.title = date = request.POST['title']
+        #ogr_detail.friends_name = friend,
+        ogr_detail.money = request.POST['money']
+        ogr_detail.detail = request.POST['detail']
+        ogr_detail.save()
+        return redirect('detail',ogr_id)
         
-    return render(request, 'ogr/detail.html',context)
+    return render(request, 'ogr/edit.html',context)
 
 
 def my_page(request, user):
@@ -86,6 +104,13 @@ def detail(request, ogr_id):
     #詳細
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
     context = {'ogr_detail': ogr_detail }
+    if request.method == 'POST':
+        if request.POST['solution'] == '1':
+            ogr_detail.solution = 1
+        elif request.POST['solution'] == '0':
+            ogr_detail.solution = 0
+        ogr_detail.save()
+        return redirect('detail',ogr_id)
     return render(request, 'ogr/detail.html',context)
 
 def delete(request, ogr_id):

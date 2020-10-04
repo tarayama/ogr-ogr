@@ -45,36 +45,38 @@
         <h3>貸し借り記録の追加</h3>
         <br/>
     
-        <form action="{% url 'create_log' %}" class="form-horizo​​ntal" method="POST">
+        <form action="{% url 'edit' ogr_detail.id %}" class="form-horizo​​ntal" method="POST">
             {% csrf_token %}
             <div class="table-condensed">
             
                 <div class="form-group">
                     <label class="control-label" for="inputtitle">日時</label>
-                    <input type="date" name="date" class="form-control mx-auto w-75 p-3" />
+                    <input type="date" name="date" value="{{ ogr_detail.date }}" class="form-control mx-auto w-75 p-3" placeholder="{{ ogr_detail.date }}" />
                 </div>
                        
              
                 <div class="form-group">
                     <label class="control-label" for="inputdate">タイトル</label>
-                    <input type="text" name="title" class="form-control mx-auto w-75 p-3" />
+                    <input type="text" name="title" value="{{ ogr_detail.title }}" class="form-control mx-auto w-75 p-3" placeholder="{{ ogr_detail.title }}" />
                     
                 </div>
                
                 <div class="form-group"> 
                     <label class="control-label" for="inputdetail">金額</label>                    
-                    <input type="number" name="money" class="form-control mx-auto w-75 p-3" />
+                    <input type="number" name="money" value="{{ ogr_detail.money }}" class="form-control mx-auto w-75 p-3" placeholder="{{ ogr_detail.money }}"/>
                 </div>
+
+                <p>相手の方は編集できません</p>
               
-                <div class="form-group"> 
+                <!--<div class="form-group"> 
                     
                     <label class="control-label" for="inputtitle">相手の名前</label>
-                    <input type="text" name="friends_name" class="form-control mx-auto w-75 p-3" /> 
+                    <input type="text" name="friends_name" value="{{ ogr_detail.friends_name.name }}" class="form-control mx-auto w-75 p-3" placeholder="{{ ogr_detail.friends_name.name }}"/> 
                     <p>ヒント:今までに以下の方たちとやり取りされています</p>
                     <p>*注意：以前やり取りされたことのある方は同じ名前で登録してください</p>
                     {% if friend_list %}
                         {% for peron in friend_list %}
-                            <li>{{  person.name  }}さん</li>
+                            <li>{{  person  }}さん</li>
                         {% endfor %}
                     
                     {% else %}
@@ -82,19 +84,22 @@
                     {% endif %}
                     <p>*注意：</p>
                 
-                </div>
+                </div>-->
              
                 <div class="form-group">
                     <label class="control-label" for="inputdetail">詳細</label>
-                    <textarea id="textarea1" name="detail" class="form-control mx-auto w-75 p-3"></textarea>
+                    <input type="textarea" id="textarea1" name="detail" value="{{ ogr_detail.detail }}" class="form-control mx-auto w-75 p-3" />
                 </div>
+
+                
              
             </div>
 
             <p>※借りたときは金額を「-(マイナス)」をつけて入力してください</p>
             <br>
-            <input class="btn btn-primary" id="btn" type="submit" placeholder="登録する"  />
+            <input class="btn btn-info" id="btn" type="submit" placeholder="編集を完了する"  />
         <a href="{% url 'top' user %}">ホームに戻る</a>
     </form>
+    <br/>
     </body>
 </html>
