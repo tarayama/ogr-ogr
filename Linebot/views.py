@@ -12,8 +12,7 @@ def callback(request):
         for event in events:
             message = event['message']
             reply_token = event['replyToken']
-            line_message = LineMessage()
-            line_message.create_message(message['text'])
+            line_message = LineMessage(create_message(message['text']))
             line_message.reply(reply_token)
         return HttpResponse("ok")
     return HttpResponseBadRequest("error occured")

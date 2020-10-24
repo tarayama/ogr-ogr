@@ -32,11 +32,12 @@ class LineMessage():
         except urllib.error.URLError as err:
             print(err.reason)
     
-    def create_message(self, messages):
+def create_message(message):
         test_message = [
                     {
                         'type': 'text',
-                        'text': messages
+                        'text': message
                     }
                 ]
         return test_message
+
