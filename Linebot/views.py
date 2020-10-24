@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 import json
 from django.views.decorators.csrf import csrf_exempt
 from .message import *
@@ -16,3 +16,4 @@ def callback(request):
             line_message.create_message(message['text'])
             line_message.reply(reply_token)
         return HttpResponse("ok")
+    return HttpResponseBadRequest("error occured")
