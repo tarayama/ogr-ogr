@@ -66,25 +66,21 @@
                     <input type="number" name="money" value="{{ ogr_detail.money }}" class="form-control mx-auto w-75 p-3" placeholder="{{ ogr_detail.money }}"/>
                 </div>
 
-                <p>相手の方は編集できません</p>
-              
-                <!--<div class="form-group"> 
-                    
-                    <label class="control-label" for="inputtitle">相手の名前</label>
-                    <input type="text" name="friends_name" value="{{ ogr_detail.friends_name.name }}" class="form-control mx-auto w-75 p-3" placeholder="{{ ogr_detail.friends_name.name }}"/> 
-                    <p>ヒント:今までに以下の方たちとやり取りされています</p>
-                    <p>*注意：以前やり取りされたことのある方は同じ名前で登録してください</p>
+                <div class="form-group"> 
+                    <label for="exampleFormControlSelect1">相手の名前</label>
+                    <select class="form-control mx-auto w-75" name="friends_name" id="exampleFormControlSelect1">
                     {% if friend_list %}
-                        {% for peron in friend_list %}
-                            <li>{{  person  }}さん</li>
+                        {% for person in friend_list %}
+                            <option value="{{ person.id }}">{{  person.name  }}さん</option>
                         {% endfor %}
-                    
                     {% else %}
                         <p>いまだ貸し借りのしたことある人はいません</p>
                     {% endif %}
-                    <p>*注意：</p>
-                
-                </div>-->
+                    </select>
+                    
+                    <br/>
+                    <a href="{% url 'addfriend' %}">相手の追加</a>
+                </div>
              
                 <div class="form-group">
                     <label class="control-label" for="inputdetail">詳細</label>

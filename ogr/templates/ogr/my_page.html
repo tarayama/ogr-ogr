@@ -40,15 +40,15 @@
                         <div class="card-body">
                             <h5 class="card-title">一覧</h5>
                             {% if friend_list %}
-                                {% for peron in friend_list %}
-                                    <p class="card-text">{{  person.friends_name.name  }}さん</p>
+                                {% for person in friend_list %}
+                                    <p class="card-text">{{  person.name  }}さん</p>
                                 {% endfor %}
                             
                             {% else %}
                                 <p class="card-text">いまだ貸し借りのしたことある人はいません</p>
                             {% endif %}
                         
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <a href="{% url 'addfriend' %}" class="btn btn-primary">友達の追加</a>
                         </div>
                     </div>
                 </div>

@@ -34,6 +34,7 @@ DEBUG = False
 INSTALLED_APPS = [
     'social_django',
     'ogr.apps.OgrConfig',
+    'Linebot.apps.LinebotConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',

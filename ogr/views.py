@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Ogr_ogr, Friend
-from django.http import Http404
+from django.http import Http404, HttpResponse
 
 # Create your views here.
 def index(request):
@@ -13,7 +13,7 @@ def index(request):
 @login_required
 def top(request, user):
     #ログイン後トップ
-    ogr_list = Ogr_ogr.objects.filter(user=request.user)
+    ogr_list = Ogr_ogr.objects.filter(user=request.user).order_by('-date')
     context = {'ogr_list': ogr_list }
     return render(request, 'ogr/top.html', context)
 
@@ -23,25 +23,15 @@ def edit(request, ogr_id):
     context = {
         'ogr_detail': ogr_detail,
         'friend_list' : friend_list }
-    friend = ogr_detail.friends_name
     if request.method == 'POST':
-        #for person in friend_list:
-        #    if person.name != request.POST['friends_name']:
-        #        new_friend = Friend(
-        #            user = request.user,
-        #            name = request.POST['friends_name']
-        #        )
-        #        new_friend.save()
-        #        friend = new_friend
-        #        break
-        #    elif person.name == request.POST['friends_name']:
-        #        friend = person
+        same_friend = Friend.objects.get(id=int(request.POST['friends_name']))
         ogr_detail.date = request.POST['date']
-        ogr_detail.title = date = request.POST['title']
-        #ogr_detail.friends_name = friend,
+        ogr_detail.title = request.POST['title']
+        ogr_detail.friends_name = same_friend
         ogr_detail.money = request.POST['money']
         ogr_detail.detail = request.POST['detail']
         ogr_detail.save()
+    
         return redirect('detail',ogr_id)
         
     return render(request, 'ogr/edit.html',context)
@@ -59,40 +49,38 @@ def my_page(request, user):
 def addfriend(request):
     friend_list = Friend.objects.filter(user=request.user)
     context = {'friend_list': friend_list }
+    friend = ""
     if request.method == 'POST':
         for person in friend_list:
-            if person.name != request.POST['friend']:
-                new_friend = Friend(
-                    user = request.user,
-                    name = request.POST['friend']
-                )
-                new_friend.save()
+            if person.name == request.POST['friend']: 
+                if person.user == request.user:
+                    return HttpResponse("エラー：既に登録されている名前です。他の名前をご利用ください")
+
+        new_friend = Friend(
+            user = request.user,
+            name = request.POST['friend']
+        )
+        new_friend.save()
+                
+            
                 
         return redirect('top', request.user)
     return render(request, 'ogr/addfriend.html', {})
+
+
 
 def create_log(request):
     #記録の作成
     friend_list = Friend.objects.filter(user=request.user)
     context = {'friend_list': friend_list }
-    friend = request.user
+    
     if request.method == 'POST':
-        for person in friend_list:
-            if person.name != request.POST['friends_name']:
-                new_friend = Friend(
-                    user = request.user,
-                    name = request.POST['friends_name']
-                )
-                new_friend.save()
-                friend = new_friend
-                break
-            elif person.name == request.POST['friends_name']:
-                friend = person
+        same_friend = Friend.objects.get(id=int(request.POST['friends_name']))
         b_or_l_Log = Ogr_ogr(
             user = request.user,
             date = request.POST['date'],
             title = request.POST['title'],
-            friends_name = friend,
+            friends_name = same_friend,
             money = request.POST['money'],
             detail = request.POST['detail'],
         )
@@ -118,3 +106,10 @@ def delete(request, ogr_id):
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
     ogr_detail.delete() 
     return redirect('top', request.user)
+
+def person_total_money(friend_name):
+    result = 0
+    friend = Friend.objects.filter(name=friend_name)
+    for i in friend:
+        result += i.money
+    return result
