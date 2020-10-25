@@ -109,7 +109,7 @@ def delete(request, ogr_id):
 
 def person_total_money(friend_name):
     result = 0
-    friend = Friend.objects.filter(name=friend_name)
-    for i in friend:
+    event = Ogr_ogr.objects.filter(name=friend_name.name)
+    for i in event:
         result += i.money
     return result
