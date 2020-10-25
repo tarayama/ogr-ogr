@@ -21,7 +21,7 @@ handler = WebhookHandler('aee19c2888e15836a85f7f191b403cdb')
 
 
 # Create your views here.
-@csrf_exempt
+#@csrf_exempt
 def callback(request):
     if request.method == 'POST':
         #request = json.loads(request.body.decode('utf-8'))
@@ -35,6 +35,7 @@ def callback(request):
         signature = request.headers['X-Line-Signature']
         # get request body as text
         body = request.get_data(as_text=True)
+        print("body:",body,"\n")
         try:
             handler.handle(body, signature)
         except InvalidSignatureError:
