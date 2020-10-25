@@ -33,11 +33,54 @@ class LineMessage():
             print(err.reason)
     
 def create_message(message):
-        test_message = [
-                    {
-                        'type': 'text',
-                        'text': message
-                    }
-                ]
-        return test_message
+    specific_words = ['使い方','url','新しい相手','記録の追加']
+    if message == '使い方':
+        message = HowtoUse_message()
+    
+    elif message == 'url':
+        message = "このアプリのurlはhtps://ogr-ogr.herokuapp.comです"
+    test_message = [
+                {
+                    'type': 'text',
+                    'text': message
+                }
+            ]
+    return test_message
 
+def HowtoUse_message():
+    message = {
+        "type": "template",
+        "altText": "使い方/How to use",
+        "template": {
+            "type": "buttons",
+            "thumbnailImageUrl": "https://example.com/bot/images/image.jpg",
+            "imageAspectRatio": "rectangle",
+            "imageSize": "cover",
+            "imageBackgroundColor": "#FFFFFF",
+            "title": "Menu",
+            "text": "Please select",
+            "defaultAction": {
+                "type": "uri",
+                "label": "View detail",
+                "uri": "http://example.com/page/123"
+            },
+            "actions": [
+                {
+                    "type": "postback",
+                    "label": "Buy",
+                    "data": "action=buy&itemid=123"
+                },
+                {
+                    "type": "postback",
+                    "label": "Add to cart",
+                    "data": "action=add&itemid=123"
+                },
+                {
+                    "type": "uri",
+                    "label": "View detail",
+                    "uri": "https://ogr-ogr.herokuapp.com"
+                }
+            ]
+        }
+    }
+    return message
