@@ -21,7 +21,7 @@ handler = WebhookHandler('aee19c2888e15836a85f7f191b403cdb')
 
 
 # Create your views here.
-@csrf_exempt
+#@csrf_exempt
 def callback(request):
     if request.method == 'POST':
         #request = json.loads(request.body.decode('utf-8'))
@@ -40,7 +40,7 @@ def callback(request):
         except InvalidSignatureError:
             print("Invalid signature. Please check your channel access token/channel secret.")
             abort(400)
-        return HttpResponse("ok")
+        return "ok"
     return HttpResponseBadRequest("error occured")
 
 @handler.add(MessageEvent, message=TextMessage)
