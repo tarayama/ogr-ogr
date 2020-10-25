@@ -1,11 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
-import json
 from django.views.decorators.csrf import csrf_exempt
-from .message import *
-
 from flask import Flask, request, abort
-
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -28,14 +24,6 @@ handler = WebhookHandler(CHANNEL_SECRET)
 @csrf_exempt
 def callback(request):
     if request.method == 'POST':
-        #request = json.loads(request.body.decode('utf-8'))
-        #events = request['events']
-        #for event in events:
-        #    message = event['message']
-        #    reply_token = event['replyToken']
-        #    line_message = LineMessage(create_message(message['text']))
-        #    line_message.reply(reply_token)
-        # return HttpResponse("ok")
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
         try:
@@ -43,7 +31,7 @@ def callback(request):
         except InvalidSignatureError:
             print("Invalid signature. Please check your channel access token/channel secret.")
             abort(400)
-        return "ok"
+        return HttpResponse('OK', status=200)
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
