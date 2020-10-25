@@ -21,7 +21,7 @@ handler = WebhookHandler('aee19c2888e15836a85f7f191b403cdb')
 
 
 # Create your views here.
-#@csrf_exempt
+@csrf_exempt
 def callback(request):
     if request.method == 'POST':
         #request = json.loads(request.body.decode('utf-8'))
