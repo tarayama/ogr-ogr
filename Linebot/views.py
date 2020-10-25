@@ -16,8 +16,11 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-line_bot_api = LineBotApi('ZlxbDtTS3SfT9gZjOc8FKgZ+Kkgga9/7VUqfmkb0v3pGOqQFjUA2+A86EJma9riHF32eneBx3fgN+pwEPMRURsbrKOnhWRCo4glIaXfW1W005VUgSEXI7F3wbC0ueR77b0Axq8HgOV2BLZVLJqA9aQdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('aee19c2888e15836a85f7f191b403cdb')
+CHANNEL_ACCESS_TOKEN = 'ZlxbDtTS3SfT9gZjOc8FKgZ+Kkgga9/7VUqfmkb0v3pGOqQFjUA2+A86EJma9riHF32eneBx3fgN+pwEPMRURsbrKOnhWRCo4glIaXfW1W005VUgSEXI7F3wbC0ueR77b0Axq8HgOV2BLZVLJqA9aQdB04t89/1O/w1cDnyilFU='
+CHANNEL_SECRET ='4ba709d015f6455475c8aa59369cd88f'
+
+line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(CHANNEL_SECRET)
 
 
 # Create your views here.
@@ -42,7 +45,6 @@ def callback(request):
             print("Invalid signature. Please check your channel access token/channel secret.")
             abort(400)
         return "ok"
-    return HttpResponseBadRequest("error occured")
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
