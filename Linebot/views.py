@@ -15,9 +15,10 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
+import os
 
-CHANNEL_ACCESS_TOKEN = 'ZlxbDtTS3SfT9gZjOc8FKgZ+Kkgga9/7VUqfmkb0v3pGOqQFjUA2+A86EJma9riHF32eneBx3fgN+pwEPMRURsbrKOnhWRCo4glIaXfW1W005VUgSEXI7F3wbC0ueR77b0Axq8HgOV2BLZVLJqA9aQdB04t89/1O/w1cDnyilFU='
-CHANNEL_SECRET ='4ba709d015f6455475c8aa59369cd88f'
+CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
@@ -35,10 +36,8 @@ def callback(request):
         #    line_message = LineMessage(create_message(message['text']))
         #    line_message.reply(reply_token)
         # return HttpResponse("ok")
-        signature = request.headers['X-Line-Signature']
-        # get request body as text
-        body = request.get_data(as_text=True)
-        print("body:",body,"\n")
+        signature = request.META['HTTP_X_LINE_SIGNATURE']
+        body = request.body.decode('utf-8')
         try:
             handler.handle(body, signature)
         except InvalidSignatureError:
