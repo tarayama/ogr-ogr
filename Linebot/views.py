@@ -82,10 +82,10 @@ def DisConnect_LineAccount(event,token):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text == "ログイン":
-        return Connect_LineAccount()
-    elif event.message.text == "連係解除":
-        return DisConnect_LineAccount()
+    #if event.message.text == "ログイン":
+        #return Connect_LineAccount()
+    #elif event.message.text == "連係解除":
+        #return DisConnect_LineAccount()
 
     reply = line_bot_api.reply_message(
         event.reply_token,
