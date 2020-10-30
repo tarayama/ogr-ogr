@@ -31,9 +31,9 @@ class FriendEvent():
         plt.rcParams['font.family'] = 'Yu Mincho'
         matplotlib.use('Agg')
         plt.plot(datelist, moneylist)
-        plt.xlabel("日付")
-        plt.ylabel("金額")
-        title = "{}さんとの記録".format(friendname)
+        plt.xlabel("Date")
+        plt.ylabel("Money")
+        title = "{} 's money log".format(friendname)
         plt.title(title)
         img = io.BytesIO()
         plt.savefig(img, format='png', dpi=200)
