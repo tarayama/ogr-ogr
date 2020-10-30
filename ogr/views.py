@@ -118,7 +118,9 @@ def plot_log(request, user, friendname):
         return HttpResponse("There is no event")
     event = FriendEvent(friendevent)
     datelist = event.getDatelist()
+    datelist = list(dict.fromkeys(datelist))
     moneylist = event.getMoneyList()
+    plt.rcParams['font.family'] = 'Yu Mincho'
     png = event.plot(datelist, moneylist, friendname)
     return HttpResponse(png, content_type='image/png')    
 

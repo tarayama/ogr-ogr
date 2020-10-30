@@ -10,11 +10,13 @@ class FriendEvent():
         datelist = []
         for i in self.event:
             datelist.append(str(i.date))
+        datelist = list(dict.fromkeys(datelist))
         return datelist
         
     def getMoneyList(self):
         moneylist = []
         result = 0
+        datelist = self.getdatelist()
         for i in self.event:
             result += int(i.money)
             m = result + int(i.money)
@@ -33,7 +35,7 @@ class FriendEvent():
         plt.plot(datelist, moneylist)
         plt.xlabel("Date")
         plt.ylabel("Money")
-        title = "{} 's money log".format(friendname)
+        title = "{} money log".format(friendname)
         plt.title(title)
         img = io.BytesIO()
         plt.savefig(img, format='png', dpi=200)
