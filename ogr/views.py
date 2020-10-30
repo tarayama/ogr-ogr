@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Ogr_ogr, Friend
 from django.http import Http404, HttpResponse
+import matplotlib
+import matplotlib.pyplot as plt
+from .plot import *
+import io
 
 # Create your views here.
 def index(request):
@@ -107,9 +111,21 @@ def delete(request, ogr_id):
     ogr_detail.delete() 
     return redirect('top', request.user)
 
-def person_total_money(friend_name):
-    result = 0
-    event = Ogr_ogr.objects.filter(name=friend_name.name)
-    for i in event:
-        result += i.money
-    return result
+def plot_log(request, user, friendname):
+    try:
+        friendevent = Ogr_ogr.objects.filter(friends_name__name=friendname)
+    except:
+        return HttpResponse("There is no event")
+    event = FriendEvent(friendevent)
+    datelist = event.getDatelist()
+    moneylist = event.getMoneyList()
+    png = event.plot(datelist, moneylist, friendname)
+    return HttpResponse(png, content_type='image/png')    
+
+def friend_log(request, user):
+    ogr_list = Ogr_ogr.objects.filter(user=request.user)
+    friend_list = Friend.objects.filter(user=request.user)
+    context = {
+        'ogr_list' : ogr_list,
+        'friend_list' : friend_list}
+    return render(request, 'ogr/friend_log.html', context)

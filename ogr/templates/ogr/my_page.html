@@ -41,7 +41,7 @@
                             <h5 class="card-title">一覧</h5>
                             {% if friend_list %}
                                 {% for person in friend_list %}
-                                    <p class="card-text">{{  person.name  }}さん</p>
+                                    <a href="{% url 'friend' user %}" class="card-text">{{  person.name  }}さん</a><br/>
                                 {% endfor %}
                             
                             {% else %}
