@@ -34,7 +34,7 @@ class FriendEvent():
     def plot(self, datelist, moneylist, friendname):
         plt.rcParams['font.family'] = 'Yu Mincho'
         matplotlib.use('Agg')
-        plt.plot(datelist, moneylist)
+        plt.bar(datelist, moneylist)
         plt.xlabel("Date")
         plt.ylabel("Money")
         title = "{} money log".format(friendname)

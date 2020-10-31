@@ -50,8 +50,8 @@
     </p>
     <br />
     {% if friend %}
-    friend.name: {{ friend.name }}
-    <a href="{% url 'friend' user friend.name %}" class="card-text">{{  friend.name  }}さん</a>
+    <a href="{% url 'friend' user friend.name %}" class="card-text">{{  friend.name  }}さんとの記録</a>
+    現在の貸し借り金額　：　
     <img src="{% url 'plot' user friend.name %}" class="img-fluid rounded mx-auto d-block" alt="{{  friend.name  }}さんとの記録">
     
     {% else %}
