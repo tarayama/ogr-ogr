@@ -37,6 +37,7 @@ class FriendEvent():
         plt.bar(datelist, moneylist)
         plt.xlabel("Date")
         plt.ylabel("Money")
+        plt.xticks(rolation=90)
         title = "{} money log".format(friendname)
         plt.title(title)
         img = io.BytesIO()

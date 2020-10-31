@@ -127,8 +127,11 @@ def plot_log(request, user, friendname):
 def friend_log(request, user, friendname):
     ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__name=friendname)
     friend = Friend.objects.get(user=request.user, name=friendname)
+    event = FriendEvent(ogr_list)
+    totalmoney = event.getTotalMoney()
     context = {
         'ogr_list' : ogr_list,
-        'friend' : friend
+        'friend' : friend,
+        'totalmoney' : totalmoney
         }
     return render(request, 'ogr/friend_log.html', context)
