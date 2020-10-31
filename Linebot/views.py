@@ -48,7 +48,8 @@ def callback(request):
 def handle_message(event):
     reply = line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text="今はまだ開発段階のため応答できません")
+        #TextSendMessage(text=event.message.text))
     return reply
 
 
