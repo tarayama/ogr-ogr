@@ -46,9 +46,15 @@ def callback(request):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    reply = line_bot_api.reply_message(
+    if (event.message.text == "URL"):
+        reply = line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text="今はまだ開発段階のため応答できません"))
+        TextSendMessage(text="https:ogr-ogr.herokuapp.com"))
+        return reply
+    else:
+        reply = line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="今はまだ開発段階のため応答できません"))
         #TextSendMessage(text=event.message.text))
     return reply
 
