@@ -49,12 +49,10 @@
         <a class="navbar-text" href="{% url 'logout' %}">logout</a>
     </p>
     <br />
-    {% if friend_list %}
-        {% for person in friend_list %}
-            <a href="{% url 'friend' person.name %}" class="card-text">{{  person.name  }}さん</a>
-            
-            <img src="{% url 'plot' user person.name %}" class="img-fluid rounded mx-auto d-block" alt="{{  person.name  }}さんとの記録">
-        {% endfor %}
+    {% if friend %}
+    friend.name: {{ friend.name }}
+    <a href="{% url 'friend' user friend.name %}" class="card-text">{{  friend.name  }}さん</a>
+    <img src="{% url 'plot' user friend.name %}" class="img-fluid rounded mx-auto d-block" alt="{{  friend.name  }}さんとの記録">
     
     {% else %}
         <p class="card-text">いまだ貸し借りのしたことある人はいません</p>

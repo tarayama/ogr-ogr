@@ -124,10 +124,11 @@ def plot_log(request, user, friendname):
     png = event.plot(datelist, moneylist, friendname)
     return HttpResponse(png, content_type='image/png')    
 
-def friend_log(request, user):
-    ogr_list = Ogr_ogr.objects.filter(user=request.user)
-    friend_list = Friend.objects.filter(user=request.user)
+def friend_log(request, user, friendname):
+    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__name=friendname)
+    friend = Friend.objects.get(user=request.user, name=friendname)
     context = {
         'ogr_list' : ogr_list,
-        'friend_list' : friend_list}
+        'friend' : friend
+        }
     return render(request, 'ogr/friend_log.html', context)

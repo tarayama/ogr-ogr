@@ -6,21 +6,23 @@ class FriendEvent():
     def __init__(self, friendevent):
         self.event = friendevent
     
-    def getDatelist(self):
-        datelist = []
+    def getMoneyDateDict(self):
+        result = {}
         for i in self.event:
-            datelist.append(str(i.date))
-        datelist = list(dict.fromkeys(datelist))
+            if (i.date in result):
+                result[i.date] += i.money
+            else:
+                result[i.date] = i.money
+        return result
+    
+    def getDatelist(self):
+        dict = self.getMoneyDateDict()
+        datelist = list(dict.keys())
         return datelist
         
     def getMoneyList(self):
-        moneylist = []
-        result = 0
-        datelist = self.getdatelist()
-        for i in self.event:
-            result += int(i.money)
-            m = result + int(i.money)
-            moneylist.append(i.money)
+        dict = self.getMoneyDateDict()
+        moneylist = list(dict.values())
         return moneylist
     
     def getTotalMoney(self):
