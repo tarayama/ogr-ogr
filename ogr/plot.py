@@ -31,10 +31,21 @@ class FriendEvent():
             result += int(i.money)
         return result
     
+    def getTotalMoneyList(self, moneylist):
+        result = []
+        total = 0
+        for i in moneylist:
+            total += i
+            result.append(total)
+        return result
+
+    
     def plot(self, datelist, moneylist, friendname):
+        totalmoney = self.getTotalMoneyList(moneylist)
         plt.rcParams['font.family'] = 'Yu Mincho'
         matplotlib.use('Agg')
         plt.bar(datelist, moneylist)
+        plt.plot(datelist, totalmoney, color='red')
         plt.xlabel("Date")
         plt.ylabel("Money")
         plt.xticks(rotation=45)
