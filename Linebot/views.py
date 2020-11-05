@@ -56,22 +56,23 @@ def handle_message(event):
             #image_size="cover",
             #thumbnail_image_url="https://任意の画像URL.jpg",
             actions=[
-                URIAction(
-                    uri="https://ogr-ogr.herokuapp.com"",
-                    label="URL"
-                )
+                {
+                    "type": "uri",
+                    "label": "View detail",
+                    "uri": "http://ogr-ogr.herokuapp.com"
+                }
             ]
     
     elif (event.message.text == ("ログイン")):
         messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com/accounts/login")
     
     else:
-        TextSendMessage(
-            text = 
-                """このアプリは友人間での金銭の貸し借りを管理するアプリです。\n
-                今いくら借りているのか、貸しているのか管理しましょう\n
-                また、その人に対する貸し借りの可視化もできます\n""")
-    
+        messages = TextSendMessage(
+                    text = 
+                        """このアプリは友人間での金銭の貸し借りを管理するアプリです。\n
+                        今いくら借りているのか、貸しているのか管理しましょう\n
+                        また、その人に対する貸し借りの可視化もできます\n""")
+
     
     reply = line_bot_api.reply_message(
         event.reply_token,
