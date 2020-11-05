@@ -60,7 +60,7 @@ def handle_message(event):
                     {
                         "type": "uri",
                         "label": "View detail",
-                        "uri": "https://ogr-ogr.herokuapp.com/top"
+                        "uri": "https://ogr-ogr.herokuapp.com/top/tarayama"
                     }
                     #URIAction(
                     #    uri="https://ogr-ogr.herokuapp.com",
