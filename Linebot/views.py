@@ -58,28 +58,38 @@ def handle_message(event):
                 actions=[
                     {
                         "type": "uri",
+                        "label": "ログイン",
+                        "uri": "login"
+                    },
+                    {
+                        "type": "uri",
                         "label": "View detail",
-                        "uri": "http://ogr-ogr.herokuapp.com"
+                        "uri": "top"
                     }
+                    #URIAction(
+                    #    uri="https://ogr-ogr.herokuapp.com",
+                    #    label="URL"
+                    #)
                 ]
             )
         )
+    
     elif (event.message.text == ("ログイン")):
         messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com/accounts/login")
     
     else:
         messages = TextSendMessage(
                     text = 
-                        """このアプリは友人間での金銭の貸し借りを管理するアプリです。\n
-                        今いくら借りているのか、貸しているのか管理しましょう\n
-                        また、その人に対する貸し借りの可視化もできます\n""")
+                        """このアプリは友人間での金銭の貸し借りを管理するアプリです。
+                        今いくら借りているのか、貸しているのか管理しましょう
+                        また、その人に対する貸し借りの可視化もできます""")
 
     
     reply = line_bot_api.reply_message(
         event.reply_token,
         messages)
         #TextSendMessage(text="今はまだ開発段階のため応答できません"))
-    #TextSendMessage(text=event.message.text)) this message is send by user
+        #TextSendMessage(text=event.message.text)) this message is send by user
     return reply
 
 
