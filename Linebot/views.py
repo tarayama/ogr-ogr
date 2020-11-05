@@ -59,12 +59,12 @@ def handle_message(event):
                     {
                         "type": "uri",
                         "label": "ログイン",
-                        "uri": "login"
+                        "uri": "https://ogr-ogr.herokuapp.com/accounts/login"
                     },
                     {
                         "type": "uri",
                         "label": "View detail",
-                        "uri": "top"
+                        "uri": "https://ogr-ogr.herokuapp.com"
                     }
                     #URIAction(
                     #    uri="https://ogr-ogr.herokuapp.com",
