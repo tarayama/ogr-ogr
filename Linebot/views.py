@@ -56,15 +56,11 @@ def handle_message(event):
                 #image_size="cover",
                 #thumbnail_image_url="https://任意の画像URL.jpg",
                 actions=[
-                    {
-                        "type": "uri",
-                        "label": "ログイン",
-                        "uri": "https://ogr-ogr.herokuapp.com/accounts/login"
-                    },
+                    
                     {
                         "type": "uri",
                         "label": "View detail",
-                        "uri": "https://ogr-ogr.herokuapp.com"
+                        "uri": "https://ogr-ogr.herokuapp.com/top"
                     }
                     #URIAction(
                     #    uri="https://ogr-ogr.herokuapp.com",
