@@ -49,20 +49,21 @@ def handle_message(event):
     if (event.message.text == ("URL" or "url")):
         #messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com")
         messages = TemplateSendMessage(
-        alt_text="OGR^2",
-        template=ButtonsTemplate(
-            text="金銭をここで管理しましょう",
-            title="OGR^2",
-            #image_size="cover",
-            #thumbnail_image_url="https://任意の画像URL.jpg",
-            actions=[
-                {
-                    "type": "uri",
-                    "label": "View detail",
-                    "uri": "http://ogr-ogr.herokuapp.com"
-                }
-            ]
-    
+            alt_text="OGR^2",
+            template=ButtonsTemplate(
+                text="金銭をここで管理しましょう",
+                title="OGR^2",
+                #image_size="cover",
+                #thumbnail_image_url="https://任意の画像URL.jpg",
+                actions=[
+                    {
+                        "type": "uri",
+                        "label": "View detail",
+                        "uri": "http://ogr-ogr.herokuapp.com"
+                    }
+                ]
+            )
+        )
     elif (event.message.text == ("ログイン")):
         messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com/accounts/login")
     
