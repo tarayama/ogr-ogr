@@ -2,10 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from .models import LineAccount
-from flask import Flask, request, abort
 import urllib
 import json
-import secrets
+#import secrets
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -14,7 +13,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate
+    MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, URIAction
 )
 import os
 
@@ -41,21 +40,44 @@ def callback(request):
             handler.handle(body, signature)
         except InvalidSignatureError:
             print("Invalid signature. Please check your channel access token/channel secret.")
-            abort(400)
+            HttpResponse('Error occured', status=400)
         return HttpResponse('OK', status=200)
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if (event.message.text == "URL"):
-        reply = line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text="https:ogr-ogr.herokuapp.com"))
-        return reply
+    command = ["URL", "友達", "記録の追加", "金額", "お問い合わせ"]
+    if (event.message.text == ("URL" or "url")):
+        #messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com")
+        messages = TemplateSendMessage(
+        alt_text="OGR^2",
+        template=ButtonsTemplate(
+            text="金銭をここで管理しましょう",
+            title="OGR^2",
+            #image_size="cover",
+            #thumbnail_image_url="https://任意の画像URL.jpg",
+            actions=[
+                URIAction(
+                    uri="https://ogr-ogr.herokuapp.com"",
+                    label="URL"
+                )
+            ]
+    
+    elif (event.message.text == ("ログイン")):
+        messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com/accounts/login")
+    
     else:
-        reply = line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="今はまだ開発段階のため応答できません"))
-        #TextSendMessage(text=event.message.text))
+        TextSendMessage(
+            text = 
+                """このアプリは友人間での金銭の貸し借りを管理するアプリです。\n
+                今いくら借りているのか、貸しているのか管理しましょう\n
+                また、その人に対する貸し借りの可視化もできます\n""")
+    
+    
+    reply = line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+        #TextSendMessage(text="今はまだ開発段階のため応答できません"))
+    #TextSendMessage(text=event.message.text)) this message is send by user
     return reply
 
 
