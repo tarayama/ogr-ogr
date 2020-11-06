@@ -5,7 +5,7 @@ from .models import LineAccount
 import urllib
 import json
 #import secrets
-from .models import Ogr_ogr, Friend
+from ogr.models import Ogr_ogr, Friend
 
 
 from linebot import (
