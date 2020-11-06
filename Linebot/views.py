@@ -74,13 +74,6 @@ def login_again():
         )
     return messages
 
-def reply_message(event, messages):
-    reply = line_bot_api.reply_message(
-        event.reply_token,
-        messages)
-        #TextSendMessage(text="今はまだ開発段階のため応答できません"))
-        #TextSendMessage(text=event.message.text)) this message is send by user
-    return reply
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event, request):
@@ -139,12 +132,12 @@ def handle_message(event, request):
                         "このアプリは友人間での金銭の貸し借りを管理するアプリです。\n今いくら借りているのか、貸しているのか管理しましょう\nまた、その人に対する貸し借りの可視化もできます")
 
     
-    #reply = line_bot_api.reply_message(
-        #event.reply_token,
-        #messages)
+    reply = line_bot_api.reply_message(
+        event.reply_token,
+        messages)
         #TextSendMessage(text="今はまだ開発段階のため応答できません"))
         #TextSendMessage(text=event.message.text)) this message is send by user
-    return reply_message(event, messages)#reply
+    return reply
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
