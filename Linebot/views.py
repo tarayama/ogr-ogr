@@ -5,6 +5,8 @@ from .models import LineAccount
 import urllib
 import json
 #import secrets
+from .models import Ogr_ogr, Friend
+
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -13,7 +15,19 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, URIAction
+    MessageEvent, TextMessage, TextSendMessage,
+    SourceUser, SourceGroup, SourceRoom,
+    TemplateSendMessage, ConfirmTemplate, MessageAction,
+    ButtonsTemplate, ImageCarouselTemplate, ImageCarouselColumn, URIAction,
+    PostbackAction, DatetimePickerAction,
+    CameraAction, CameraRollAction, LocationAction,
+    CarouselTemplate, CarouselColumn, PostbackEvent,
+    StickerMessage, StickerSendMessage, LocationMessage, LocationSendMessage,
+    ImageMessage, VideoMessage, AudioMessage, FileMessage,
+    UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent, BeaconEvent,
+    FlexSendMessage, BubbleContainer, ImageComponent, BoxComponent,
+    TextComponent, SpacerComponent, IconComponent, ButtonComponent,
+    SeparatorComponent, QuickReply, QuickReplyButton
 )
 import os
 
@@ -43,44 +57,24 @@ def callback(request):
             HttpResponse('Error occured', status=400)
         return HttpResponse('OK', status=200)
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    command = ["URL", "友達", "記録の追加", "金額", "お問い合わせ"]
-    if (event.message.text == ("URL" or "url")):
-        #messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com")
-        messages = TemplateSendMessage(
+def login_again():
+    messages = TemplateSendMessage(
             alt_text="OGR^2",
             template=ButtonsTemplate(
-                text="金銭をここで管理しましょう",
-                title="OGR^2",
-                #image_size="cover",
-                #thumbnail_image_url="https://任意の画像URL.jpg",
+                text="こちらからもう一度ログインしなおしてみてください",
+                title="エラーが発生しました。",
                 actions=[
-                    
                     {
                         "type": "uri",
-                        "label": "View detail",
-                        "uri": "https://ogr-ogr.herokuapp.com/top/tarayama"
+                        "label": "login again",
+                        "uri": "https://ogr-ogr.herokuapp.com/accounts/login"
                     }
-                    #URIAction(
-                    #    uri="https://ogr-ogr.herokuapp.com",
-                    #    label="URL"
-                    #)
                 ]
             )
         )
-    
-    elif (event.message.text == ("ログイン")):
-        messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com/accounts/login")
-    
-    else:
-        messages = TextSendMessage(
-                    text = 
-                        """このアプリは友人間での金銭の貸し借りを管理するアプリです。
-                        今いくら借りているのか、貸しているのか管理しましょう
-                        また、その人に対する貸し借りの可視化もできます""")
+    return messages
 
-    
+def reply_message(event, messages):
     reply = line_bot_api.reply_message(
         event.reply_token,
         messages)
@@ -88,5 +82,80 @@ def handle_message(event):
         #TextSendMessage(text=event.message.text)) this message is send by user
     return reply
 
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event, request):
+    #command = ["URL", "友達", "記録の追加", "金額", "お問い合わせ"]
+    if (event.message.text == ("URL")):
+        #messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com")
+        messages = TemplateSendMessage(
+            alt_text="OGR^2",
+            template=ButtonsTemplate(
+                text="金銭をここで管理しましょう。",
+                title="OGR^2",
+                actions=[
+                    {
+                        "type": "uri",
+                        "label": "View detail",
+                        "uri": "https://ogr-ogr.herokuapp.com/top/tarayama"
+                    }
+                ]
+            )
+        )
+    
+    elif (event.message.text == ("友達")):
+        try:
+            friend_list = Friend.objects.filter(user=request.user)
+            messages = TextSendMessage(
+                            text='Menu',
+                            quick_reply=QuickReply(
+                                items=[
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達一覧", data="friendslist")
+                                ),
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達の追加", data="addfriend")
+                                ),
+                            ]))
+        except:
+            messages = login_again()
+    
+    elif (event.message.text == ("記録の追加")):
+        try:
+            ogr_list = Ogr_ogr.objects.Filter(user=request.user)
+            friend_list = Friend.objects.filter(user=request.user)
+        except:
+            pass
+
+    elif (event.message.text == ("金額")):
+        try:
+            pass
+        except:
+            pass
+    
+    
+    else:
+        messages = TextSendMessage(
+                    text = 
+                        "このアプリは友人間での金銭の貸し借りを管理するアプリです。\n今いくら借りているのか、貸しているのか管理しましょう\nまた、その人に対する貸し借りの可視化もできます")
+
+    
+    #reply = line_bot_api.reply_message(
+        #event.reply_token,
+        #messages)
+        #TextSendMessage(text="今はまだ開発段階のため応答できません"))
+        #TextSendMessage(text=event.message.text)) this message is send by user
+    return reply_message(event, messages)#reply
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+
+    UserID = event.source.user_id
+    if event.postback.data == 'addfriend':
+        pass
+
+    elif event.postback.data == 'friendslist':
+        pass
+
+    
 
 
