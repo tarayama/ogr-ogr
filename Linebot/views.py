@@ -94,12 +94,12 @@ def handle_message(event, request):
                 ]
             )
         )
-    
+
     elif (event.message.text == ("友達")):
         try:
             friend_list = Friend.objects.filter(user=request.user)
             messages = TextSendMessage(
-                            text='Menu',
+                            text='項目を選択してください',
                             quick_reply=QuickReply(
                                 items=[
                                 QuickReplyButton(
@@ -116,6 +116,17 @@ def handle_message(event, request):
         try:
             ogr_list = Ogr_ogr.objects.Filter(user=request.user)
             friend_list = Friend.objects.filter(user=request.user)
+            messages = TextSendMessage(
+                            text='項目を選択してください',
+                            quick_reply=QuickReply(
+                                items=[
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達一覧", data="friendslist")
+                                ),
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達の追加", data="addfriend")
+                                ),
+                            ]))
         except:
             pass
 
@@ -124,7 +135,7 @@ def handle_message(event, request):
             pass
         except:
             pass
-    
+
     
     else:
         messages = TextSendMessage(
