@@ -1,4 +1,7 @@
-# ogr-ogr(正式名「OGR^2」)
+# ogr-ogr　
+正式名称「OGR^2」
+
+
 金銭管理アプリOGR^2のrepositoryです
 
 ### コンセプト・概要
