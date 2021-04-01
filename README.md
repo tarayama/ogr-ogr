@@ -9,7 +9,7 @@
 <img src="https://github.com/tarayama/pictures/blob/main/OGR%5E2_concept_image.jpg">
 
 ### リリース
-- https://ogr-or.herokuapp.com
+- https://ogr-ogr.herokuapp.com
 
 ### 仕様について
 仕様については
