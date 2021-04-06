@@ -46,6 +46,12 @@ LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
 print(LINE_CHANNEL_ACCESS_TOKEN)
 print(LINE_CHANNEL_SECRET)
 
+LINEBOT_ENDPOINT = 'https://api.line.me/v2/bot'
+HEADER = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
+}
+
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
