@@ -47,12 +47,6 @@ LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
-LINEBOT_ENDPOINT = 'https://api.line.me/v2/bot'
-HEADER = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
-}
-
 # Create your views here.
 @csrf_exempt
 def callback(request):
@@ -118,7 +112,12 @@ def Make_Django_Account():
 def Connect_Django_and_Line(Line_user_id):
     AccountLinkToken = Issue_LineAccountlinkToken(Line_user_id)
     Redirect_UserLinkURL(Line_user_id, AccountLinkToken)
-    return 0
+    #接続に成功したメッセージを送信する。
+    profile = line_bot_api.get_profile(Line_user_id)
+    messages = TextSendMessage(
+                        text = 
+                            "接続に成功しました。\nこんにちは　{}さん。\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name))
+    return messages
 
 #1.連携トークンを発行する
 def Issue_LineAccountlinkToken(Line_user_id):
