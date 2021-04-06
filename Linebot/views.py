@@ -51,7 +51,9 @@ HEADER = {
 }
 
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
+print("line_bot_api",line_bot_api)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
+print("handler",handler)
 
 # Create your views here.
 @csrf_exempt
@@ -61,7 +63,7 @@ def callback(request):
         print("signature:",signature)
         body = request.body.decode('utf-8')
         try:
-            handler.handle(body, signature)
+            print("検証：",handler.handle(body, signature))
         except InvalidSignatureError:
             print("Invalid signature. Please check your channel access token/channel secret.")
             return HttpResponse('Error occured', status=400)
@@ -69,16 +71,16 @@ def callback(request):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event, request):
-    command = ["接続","新規登録","使い方","登録"]
+    command = ["接続","新規登録","使い方","友達"]
     if event.message.text == "接続":
         Line_user_id = event.source.user_id
         messages = Connect_Django_and_Line(Line_user_id)
-    elif event.message.text == "新規接続":
+    elif event.message.text == "新規登録":
         messages = Make_Django_Account()
     elif event.message.text == "使い方":
-        messages = "How to use"
+        messages = TextSendMessage(text="How to use")
     elif event.message.text == "友達":
-        messages = "You have so many friends. I'm so jealous!"
+        messages = TextSendMessage(text="You have so many friends. I'm so jealous!")
     else:
         messages = Normal_Reply_Message()
 

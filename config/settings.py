@@ -149,6 +149,9 @@ LOGOUT_REDIRECT_URL = 'index'
 if not DEBUG:
     import django_heroku
     django_heroku.settings(locals())
+    SECRET_KEY = os.environ['SECRET_KEY']
+    LINE_CHANNEL_ACCESS_TOKEN = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
+    LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
 
 try:
     from .local_settings import *
