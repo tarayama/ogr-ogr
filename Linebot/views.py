@@ -65,7 +65,7 @@ def callback(request):
             handler.handle(body, signature)
         except InvalidSignatureError:
             print("Invalid signature. Please check your channel access token/channel secret.")
-            HttpResponse('Error occured', status=400)
+            return HttpResponse('Error occured', status=400)
         return HttpResponse('OK', status=200)
 
 @handler.add(MessageEvent, message=TextMessage)
