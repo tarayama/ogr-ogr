@@ -43,8 +43,6 @@ except:
 
 LINE_CHANNEL_ACCESS_TOKEN = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
 LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
-print(LINE_CHANNEL_ACCESS_TOKEN)
-print(LINE_CHANNEL_SECRET)
 
 LINEBOT_ENDPOINT = 'https://api.line.me/v2/bot'
 HEADER = {
@@ -60,6 +58,7 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 def callback(request):
     if request.method == 'POST':
         signature = request.META['HTTP_X_LINE_SIGNATURE']
+        print("signature:",signature)
         body = request.body.decode('utf-8')
         try:
             handler.handle(body, signature)
