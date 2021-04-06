@@ -42,7 +42,9 @@ except:
     pass
 
 LINE_CHANNEL_ACCESS_TOKEN = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
+print("token:",LINE_CHANNEL_ACCESS_TOKEN)
 LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
+print("secret:",LINE_CHANNEL_SECRET)
 
 LINEBOT_ENDPOINT = 'https://api.line.me/v2/bot'
 HEADER = {
@@ -63,7 +65,7 @@ def callback(request):
         print("signature:",signature)
         body = request.body.decode('utf-8')
         try:
-            print("検証：",handler.handle(body, signature))
+            handler.handle(body, signature)
         except InvalidSignatureError:
             print("Invalid signature. Please check your channel access token/channel secret.")
             return HttpResponse('Error occured', status=400)
