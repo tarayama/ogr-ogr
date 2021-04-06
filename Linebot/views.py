@@ -64,6 +64,7 @@ def callback(request):
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         print("signature:",signature)
         body = request.body.decode('utf-8')
+        print("body", body)
         try:
             handler.handle(body, signature)
         except InvalidSignatureError:
