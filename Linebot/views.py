@@ -1,11 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from .models import LineAccount
 import urllib
 import json
-#import secrets
+import secrets
+import requests
+import base64
 from ogr.models import Ogr_ogr, Friend
+from .forms import LineLinkForm
 
 
 from linebot import (
@@ -31,17 +36,21 @@ from linebot.models import (
 )
 import os
 
+try:
+    import Linebot.environment_valiable
+except:
+    pass
 
-CHANNEL_ACCESS_TOKEN = 'ZlxbDtTS3SfT9gZjOc8FKgZ+Kkgga9/7VUqfmkb0v3pGOqQFjUA2+A86EJma9riHF32eneBx3fgN+pwEPMRURsbrKOnhWRCo4glIaXfW1W005VUgSEXI7F3wbC0ueR77b0Axq8HgOV2BLZVLJqA9aQdB04t89/1O/w1cDnyilFU='
-CHANNEL_SECRET = '4ba709d015f6455475c8aa59369cd88f'
+LINE_CHANNEL_ACCESS_TOKEN = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
+LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
 
-line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(CHANNEL_SECRET)
+line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 LINEBOT_ENDPOINT = 'https://api.line.me/v2/bot'
 HEADER = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN
+    'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
 }
 
 # Create your views here.
@@ -57,98 +66,136 @@ def callback(request):
             HttpResponse('Error occured', status=400)
         return HttpResponse('OK', status=200)
 
-def login_again():
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event, request):
+    command = ["接続","新規登録","使い方","登録"]
+    if event.message.text == "接続":
+        Line_user_id = event.source.user_id
+        messages = Connect_Django_and_Line(Line_user_id)
+    elif event.message.text == "新規接続":
+        messages = Make_Django_Account()
+    elif event.message.text == "使い方":
+        messages = "How to use"
+    elif event.message.text == "友達":
+        messages = "You have so many friends. I'm so jealous!"
+    else:
+        messages = Normal_Reply_Message()
+
+    reply = line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+        #TextSendMessage(text=event.message.text)) this message is send by user
+    return reply
+
+def Normal_Reply_Message():
+    messages = TextSendMessage(
+                        text = 
+                            "このアプリは友人間での金銭の貸し借りを管理するアプリです。\n今いくら借りているのか、貸しているのか管理しましょう\nまた、その人に対する貸し借りの可視化もできます")
+    return messages
+
+def Make_Django_Account():
     messages = TemplateSendMessage(
-            alt_text="OGR^2",
-            template=ButtonsTemplate(
-                text="こちらからもう一度ログインしなおしてみてください",
-                title="エラーが発生しました。",
-                actions=[
+            alt_text = "OGR^2",
+            template = ButtonsTemplate(
+                text = "こちらからアカウントを作成してください。Google Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
+                title = "新規登録",
+                actions = [
                     {
-                        "type": "uri",
-                        "label": "login again",
-                        "uri": "https://ogr-ogr.herokuapp.com/accounts/login"
+                        "type" : "uri",
+                        "label" : "make account",
+                        "uri" : "https://ogr-ogr.herokuapp.com/accounts/signup"
+                    },
+                    {
+                        "type" : "uri",
+                        "label" : "Google login",
+                        "uri" : "https://ogr-ogr.herokuapp.com/accounts/login"
                     }
                 ]
             )
         )
     return messages
 
+def Connect_Django_and_Line(Line_user_id):
+    AccountLinkToken = Issue_LineAccountlinkToken(Line_user_id)
+    Redirect_UserLinkURL(Line_user_id, AccountLinkToken)
+    return 0
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event, request):
-    #command = ["URL", "友達", "記録の追加", "金額", "お問い合わせ"]
-    if (event.message.text == ("URL")):
-        #messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com")
-        messages = TemplateSendMessage(
-            alt_text="OGR^2",
-            template=ButtonsTemplate(
-                text="金銭をここで管理しましょう。",
-                title="OGR^2",
-                actions=[
+#1.連携トークンを発行する
+def Issue_LineAccountlinkToken(Line_user_id):
+    token_url  = "https://api.line.me/v2/bot/user/{}/linkToken".format(Line_user_id)
+    headers = {
+        'Authorization' : "Bearer {}".format(LINE_CHANNEL_ACCESS_TOKEN)
+    }
+    response = requests.post(token_url, headers=headers)
+    values = json.loads(response.text)
+    AccountLinkToken = values['linkToken']
+    return AccountLinkToken
+
+#2.ユーザーを連携URLにリダイレクトする
+def Redirect_UserLinkURL(Line_user_id, AccountLinkToken):
+    line_bot_api.push_message(
+        Line_user_id,
+        TemplateSendMessage(
+            alt_text = "OGR^2",
+            template = ButtonsTemplate(
+                text = "こちらからアカウントを作成してください。Google Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
+                title = "Account Linkを実行する",
+                actions = [
                     {
-                        "type": "uri",
-                        "label": "View detail",
-                        "uri": "https://ogr-ogr.herokuapp.com/top/tarayama"
-                    }
+                        "type" : "Account Link",
+                        "label" : "Account Link",
+                        "uri" : "http://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
+                    },
+                    
                 ]
             )
         )
-
-    elif (event.message.text == ("友達")):
-        try:
-            friend_list = Friend.objects.filter(user=request.user)
-            messages = TextSendMessage(
-                            text='項目を選択してください',
-                            quick_reply=QuickReply(
-                                items=[
-                                QuickReplyButton(
-                                    action=PostbackAction(label="友達一覧", data="friendslist")
-                                ),
-                                QuickReplyButton(
-                                    action=PostbackAction(label="友達の追加", data="addfriend")
-                                ),
-                            ]))
-        except:
-            messages = login_again()
+    )
     
-    elif (event.message.text == ("記録の追加")):
-        try:
-            ogr_list = Ogr_ogr.objects.Filter(user=request.user)
-            friend_list = Friend.objects.filter(user=request.user)
-            messages = TextSendMessage(
-                            text='項目を選択してください',
-                            quick_reply=QuickReply(
-                                items=[
-                                QuickReplyButton(
-                                    action=PostbackAction(label="友達一覧", data="friendslist")
-                                ),
-                                QuickReplyButton(
-                                    action=PostbackAction(label="友達の追加", data="addfriend")
-                                ),
-                            ]))
-        except:
-            pass
 
-    elif (event.message.text == ("金額")):
-        try:
-            pass
-        except:
-            pass
+#3.自社サービスのユーザーIDを取得する
+#4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
+def MakeNonce(): 
+    while True:
+        nonce = secrets.token_bytes(32)
+        nonce = base64.b64encode(nonce)
+        noncelist = LineAccount.objects.all()
+        for i in noncelist:
+            if i.line_nonce != nonce:
+                return nonce
+            else:
+                continue
 
-    
+def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
+    print("linkToken:",linkToken)
+    if request.method == 'POST':
+        form = LineLinkForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            user = User.objects.get(username=username)
+            login(request, user)
+            django_userid = user.id
+            #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
+            nonce = MakeNonce()
+
+            #nonceとユーザーを一緒に保存
+            accountlink = LineAccount(
+                user = request.user,
+                line_userid = Line_user_id,
+                line_nonce = nonce,
+            )
+            accountlink.save()
+            redirect_url = "https://access.line.me/dialog/bot/accountLink?linkToken={}&nonce={}".format(linkToken, nonce)
+            return redirect(redirect_url)
     else:
-        messages = TextSendMessage(
-                    text = 
-                        "このアプリは友人間での金銭の貸し借りを管理するアプリです。\n今いくら借りているのか、貸しているのか管理しましょう\nまた、その人に対する貸し借りの可視化もできます")
+        form = LineLinkForm()
+    return render(request, 'Linebot/Accountlink.html', {'form': form})
 
-    
-    reply = line_bot_api.reply_message(
-        event.reply_token,
-        messages)
-        #TextSendMessage(text="今はまだ開発段階のため応答できません"))
-        #TextSendMessage(text=event.message.text)) this message is send by user
-    return reply
+
+#5.アカウントを連携する
+
+def Disconnect_Django_and_Line():
+    return 0
 
 @handler.add(PostbackEvent)
 def handle_postback(event):

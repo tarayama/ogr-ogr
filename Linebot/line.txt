@@ -1,3 +1,103 @@
+link_url = "https://api.line.me/v2/bot/message/push"
+    headers = {
+        'Content-Type' : "application/json",
+        'Authorization' : "Bearer {}".format(LINE_CHANNEL_ACCESS_TOKEN)
+    }
+    data = {
+        "to": Line_user_id,
+        "messages": [{
+            "type": "template",
+            "altText": "Account Link",
+            "template": {
+                "type": "buttons",
+                "text": "Account Linkを実行する",
+                "actions": [{
+                    "type": "uri",
+                    "label": "Account Link",
+                    "uri": "http://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
+                }]
+            }
+        }]
+    }
+    response = requests.post(link_url, headers=headers)
+    print(response.status_code)
+
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event, request):
+    command = ["接続","URL",]
+    if (event.message.text == ("URL")):
+        #messages = TextSendMessage(text="https://ogr-ogr.herokuapp.com")
+        messages = TemplateSendMessage(
+            alt_text="OGR^2",
+            template=ButtonsTemplate(
+                text="金銭をここで管理しましょう。",
+                title="OGR^2",
+                actions=[
+                    {
+                        "type": "uri",
+                        "label": "View detail",
+                        "uri": "https://ogr-ogr.herokuapp.com/top/tarayama"
+                    }
+                ]
+            )
+        )
+
+    elif (event.message.text == ("友達")):
+        try:
+            friend_list = Friend.objects.filter(user=request.user)
+            messages = TextSendMessage(
+                            text='項目を選択してください',
+                            quick_reply=QuickReply(
+                                items=[
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達一覧", data="friendslist")
+                                ),
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達の追加", data="addfriend")
+                                ),
+                            ]))
+        except:
+            messages = login_again()
+    
+    elif (event.message.text == ("記録の追加")):
+        try:
+            ogr_list = Ogr_ogr.objects.Filter(user=request.user)
+            friend_list = Friend.objects.filter(user=request.user)
+            messages = TextSendMessage(
+                            text='項目を選択してください',
+                            quick_reply=QuickReply(
+                                items=[
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達一覧", data="friendslist")
+                                ),
+                                QuickReplyButton(
+                                    action=PostbackAction(label="友達の追加", data="addfriend")
+                                ),
+                            ]))
+        except:
+            pass
+
+    elif (event.message.text == ("金額")):
+        try:
+            pass
+        except:
+            pass
+
+    
+    else:
+        messages = TextSendMessage(
+                    text = 
+                        "このアプリは友人間での金銭の貸し借りを管理するアプリです。\n今いくら借りているのか、貸しているのか管理しましょう\nまた、その人に対する貸し借りの可視化もできます")
+
+    
+    reply = line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+        #TextSendMessage(text="今はまだ開発段階のため応答できません"))
+        #TextSendMessage(text=event.message.text)) this message is send by user
+    return reply
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def Connect_LineAccount(event):

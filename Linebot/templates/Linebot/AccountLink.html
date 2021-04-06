@@ -8,6 +8,8 @@
         <link rel="stylesheet" type="text/css" href="/static/css/detail.css" />
         <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
         <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/66d4b90c85.js" crossorigin="anonymous"></script>
+
     </head>
     <body>
         <nav class="navbar navbar-dark bg-dark">
@@ -41,27 +43,18 @@
         </nav>
         <br/>
         <br/>
-        <h1>新規登録</h1>
+        <h1>Lineリンク用ログイン</h1>
         <br/>
-        
         {% if form.errors %}
-        <p>ユーザーネームかパスワードが一致していません。もう一度お試しください</p>
+        <p>ユーザーネームとパスワードが一致していません。</p>
         {% endif %}
         <form method="post">
         {% csrf_token %}
-        <div class="table-responsive">
-            <table class="table table-sm mx-auto w-75">
-                {{ form.as_table }}
-            </table>
-        </div>
-        <input class="btn btn-primary" type="submit" value="Sign up" />
-        
+        {{ form.as_p }}
+        <input class="btn btn-primary" type="submit" value="Login" />
         </form>
-        
         <br/>
-        <br/>
-        
+        <p>ログインできない？</p>
+        <p>パスワードが分からなくなった方はこちら</p>
     </body>
-
-
 </html>

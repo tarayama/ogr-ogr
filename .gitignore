@@ -3,3 +3,6 @@ db.sqlite3
 myenv
 __pycache__
 config/local_settings.py
+Linebot/line.txt
+Linebot/key.txt
+Linebot/environment_valiable.py
