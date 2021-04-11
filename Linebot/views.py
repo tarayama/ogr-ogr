@@ -101,28 +101,28 @@ def Normal_Reply_Message():
 
 def Make_Django_Account():
     messages = TemplateSendMessage(
-        alt_text = "OGR^2",
-        template = ButtonsTemplate(
-            text = "こちらからアカウントを作成してください。\nGoogle Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
-            title = "新規登録",
-            actions = [
-                URIAction(
-                    uri="https://ogr-ogr.herokuapp.com/accounts/signup",
-                    label="新規登録"
-                )
-            ]
+            alt_text="OGR^2",
+            template=ButtonsTemplate(
+                text="こちらからアカウントを作成してください。\nGoogle Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
+                title="新規登録",
+                actions=[
+                    {
+                        "type": "uri",
+                        "label": "新規登録",
+                        "uri": "https://ogr-ogr.herokuapp.com/accounts/signup"
+                    }
+                ]
+            )
         )
-    )
     return messages
+    
 
 def Connect_Django_and_Line(Line_user_id):
     AccountLinkToken = Issue_LineAccountlinkToken(Line_user_id)
     Redirect_UserLinkURL(Line_user_id, AccountLinkToken)
     #接続中メッセージを送信する。
     profile = line_bot_api.get_profile(Line_user_id)
-    messages = TextSendMessage(
-                        text = 
-                            "接続中です\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name))
+    messages = TextSendMessage(text = "接続中です")
     return messages
 
 #1.連携トークンを発行する
@@ -172,7 +172,6 @@ def MakeNonce():
 
 def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
     if request.method == 'POST':
-        form = LineLinkForm(request.POST)
         print("Line_user_id:", Line_user_id)
         print("linkToken:",linkToken)
         username = request.POST['username']
