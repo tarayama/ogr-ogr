@@ -43,14 +43,22 @@
         </nav>
         <br/>
         <br/>
-        <h1>Lineリンク用ログイン</h1>
+        <h1>LINEリンク用ログイン</h1>
         <br/>
         {% if form.errors %}
         <p>ユーザーネームとパスワードが一致していません。</p>
         {% endif %}
-        <form method="post">
+        <form method="post" class="center-block">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="table-condensed">
+            <div class="form-group">
+                <label class="control-label" for="inputtitle">ユーザー名</label>
+                <input type="text" name="username" class="form-control mx-auto w-75 p-3" />
+                <label class="control-label" for="inputtitle">パスワード</label>
+                <input type="text" name="password" class="form-control mx-auto w-75 p-3" />
+            </div>
+        </div>   
+        <br>
         <input class="btn btn-primary" type="submit" value="Login" />
         </form>
         <br/>

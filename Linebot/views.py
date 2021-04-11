@@ -101,28 +101,28 @@ def Normal_Reply_Message():
 
 def Make_Django_Account():
     messages = TemplateSendMessage(
-            alt_text = "OGR^2",
-            template = ButtonsTemplate(
-                text = "こちらからアカウントを作成してください。Google Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
-                title = "新規登録",
-                actions = [
-                    URIAction(
-                        uri="https://ogr-ogr.herokuapp.com/accounts/signup",
-                        label="新規登録"
-                    )
-                ]
-            )
+        alt_text = "OGR^2",
+        template = ButtonsTemplate(
+            text = "こちらからアカウントを作成してください。\nGoogle Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
+            title = "新規登録",
+            actions = [
+                URIAction(
+                    uri="https://ogr-ogr.herokuapp.com/accounts/signup",
+                    label="新規登録"
+                )
+            ]
         )
+    )
     return messages
 
 def Connect_Django_and_Line(Line_user_id):
     AccountLinkToken = Issue_LineAccountlinkToken(Line_user_id)
     Redirect_UserLinkURL(Line_user_id, AccountLinkToken)
-    #接続に成功したメッセージを送信する。
+    #接続中メッセージを送信する。
     profile = line_bot_api.get_profile(Line_user_id)
     messages = TextSendMessage(
                         text = 
-                            "接続に成功しました。\nこんにちは　{}さん。\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name))
+                            "接続中です\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name))
     return messages
 
 #1.連携トークンを発行する
@@ -159,37 +159,57 @@ def Redirect_UserLinkURL(Line_user_id, AccountLinkToken):
 #3.自社サービスのユーザーIDを取得する
 #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
 def MakeNonce(): 
-    while True:
-        nonce = secrets.token_bytes(32)
-        nonce = base64.b64encode(nonce)
-        noncelist = LineAccount.objects.all()
-        for i in noncelist:
-            if i.line_nonce != nonce:
-                return nonce
-            else:
-                continue
+    nonce = secrets.token_bytes(32)
+    nonce = base64.b64encode(nonce)
+    print("Make nonce:",nonce)
+    noncelist = LineAccount.objects.all()
+    for i in noncelist:
+        if i.line_nonce != nonce:
+            break
+        else:
+            continue
+    return nonce
 
 def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
-    print("linkToken:",linkToken)
     if request.method == 'POST':
         form = LineLinkForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            user = User.objects.get(username=username)
-            login(request, user)
-            django_userid = user.id
-            #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
-            nonce = MakeNonce()
-
-            #nonceとユーザーを一緒に保存
-            accountlink = LineAccount(
-                user = request.user,
-                line_userid = Line_user_id,
-                line_nonce = nonce,
+        print("Line_user_id:", Line_user_id)
+        print("linkToken:",linkToken)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                print('ログインに成功しました')
+            else:
+                HttpResponse('Error occured', status=400)
+                print('ログインに失敗しました')
+        else:
+            HttpResponse('Error occured', status=400)
+        django_userid = user.id
+        #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
+        nonce = MakeNonce()
+        print("nonce:",nonce)
+        #nonceとユーザーを一緒に保存
+        accountlink = LineAccount(
+            user = request.user,
+            line_userid = Line_user_id,
+            line_nonceToken = nonce,
+        )
+        accountlink.save()
+        print("Success!")
+        redirect_url = "https://access.line.me/dialog/bot/accountLink?linkToken={}&nonce={}".format(linkToken, nonce)
+        redirect(redirect_url)
+        profile = line_bot_api.get_profile(Line_user_id)
+        line_bot_api.push_message(
+            Line_user_id,
+            TextSendMessage(
+                        text = 
+                            "接続に成功しました。\nこんにちは。{}/{}さん！\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name, username)
             )
-            accountlink.save()
-            redirect_url = "https://access.line.me/dialog/bot/accountLink?linkToken={}&nonce={}".format(linkToken, nonce)
-            return redirect(redirect_url)
+        )
+    
     else:
         form = LineLinkForm()
     return render(request, 'Linebot/Accountlink.html', {'form': form})
