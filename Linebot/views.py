@@ -42,9 +42,9 @@ except:
     pass
 
 LINE_CHANNEL_ACCESS_TOKEN = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
-print("token:",LINE_CHANNEL_ACCESS_TOKEN)
+#print("token:",LINE_CHANNEL_ACCESS_TOKEN)
 LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
-print("secret:",LINE_CHANNEL_SECRET)
+#print("secret:",LINE_CHANNEL_SECRET)
 
 LINEBOT_ENDPOINT = 'https://api.line.me/v2/bot'
 HEADER = {
@@ -74,8 +74,6 @@ def callback(request):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event, request):
-    if event.reply_token == "00000000000000000000000000000000":
-        return
     command = ["接続","新規登録","使い方","友達"]
     if event.message.text == "接続":
         Line_user_id = event.source.user_id
@@ -108,16 +106,14 @@ def Make_Django_Account():
                 text = "こちらからアカウントを作成してください。Google Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
                 title = "新規登録",
                 actions = [
-                    {
-                        "type" : "uri",
-                        "label" : "make account",
-                        "uri" : "https://ogr-ogr.herokuapp.com/accounts/signup"
-                    },
-                    {
-                        "type" : "uri",
-                        "label" : "Google login",
-                        "uri" : "https://ogr-ogr.herokuapp.com/accounts/login"
-                    }
+                    URIAction(
+                        uri="https://ogr-ogr.herokuapp.com/accounts/signup",
+                        label="新規登録"
+                    ),
+                    URIAction(
+                        uri="https://ogr-ogr.herokuapp.com/accounts/login",
+                        label="Google login"
+                    )
                 ]
             )
         )
@@ -149,17 +145,16 @@ def Redirect_UserLinkURL(Line_user_id, AccountLinkToken):
     line_bot_api.push_message(
         Line_user_id,
         TemplateSendMessage(
-            alt_text = "OGR^2",
+            alt_text = "Account Link",
             template = ButtonsTemplate(
-                text = "こちらからアカウントを作成してください。Google Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
+                text = "Account Link",
                 title = "Account Linkを実行する",
                 actions = [
-                    {
-                        "type" : "Account Link",
-                        "label" : "Account Link",
-                        "uri" : "http://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
-                    },
-                    
+                    URIAction(
+                        type = "Account Link",
+                        label = "Account Link",
+                        uri = "http://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
+                    )                    
                 ]
             )
         )
