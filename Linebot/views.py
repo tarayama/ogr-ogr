@@ -109,10 +109,6 @@ def Make_Django_Account():
                     URIAction(
                         uri="https://ogr-ogr.herokuapp.com/accounts/signup",
                         label="新規登録"
-                    ),
-                    URIAction(
-                        uri="https://ogr-ogr.herokuapp.com/accounts/login",
-                        label="Google login"
                     )
                 ]
             )
@@ -151,7 +147,6 @@ def Redirect_UserLinkURL(Line_user_id, AccountLinkToken):
                 title = "Account Linkを実行する",
                 actions = [
                     URIAction(
-                        type = "Account Link",
                         label = "Account Link",
                         uri = "http://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
                     )                    
