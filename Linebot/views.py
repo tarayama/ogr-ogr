@@ -157,13 +157,27 @@ def Redirect_UserLinkURL(Line_user_id, AccountLinkToken):
 
 #3.自社サービスのユーザーIDを取得する
 #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
-def MakeNonce(): 
+def MakeNonce(Line_user_id): 
     nonce = secrets.token_bytes(32)
     nonce = base64.b64encode(nonce)
     print("Make nonce:",nonce)
-    noncelist = LineAccount.objects.all()
-    if nonce in noncelist:
-        MakeNonce()
+    #Line_useridが既に存在するのかチェック
+    #既にnonceが存在するのかのチェック
+    for i in LineAccount.objects.all():
+        print(i)
+        if Line_user_id == i.line_userid:
+            print("このLINEIDは既に登録されています。")
+            return line_bot_api.push_message(
+                Line_user_id,
+                TextSendMessage(
+                            text = 
+                                "既にこのLINEIDは登録されています。登録解除する場合は「接続解除」またはブロックしてください。"
+                )
+            )
+        if nonce == i.line_nonceToken:
+            print("このnonceは他のユーザーのnonceとかぶっています。")
+            MakeNonce()
+    #存在しない場合、nonceを返す
     return nonce
 
 def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
@@ -178,13 +192,14 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
                 login(request, user)
                 print('ログインに成功しました')
             else:
-                HttpResponse('Error occured', status=400)
                 print('ログインに失敗しました')
+                return HttpResponse('エラーが発生しました。ログインに失敗した可能性があります。', status=400)
+                
         else:
-            HttpResponse('Error occured', status=400)
+            return HttpResponse('エラーが発生しました。アカウントが存在しません。 <a href ="https://ogr-ogr.herokuapp.com/accounts/signup/">こちら</a>からアカウントを作成してください。', status=400)
         django_userid = user.id
         #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
-        nonce = MakeNonce()
+        nonce = MakeNonce(Line_user_id)
         print("nonce:",nonce)
         #nonceとユーザーを一緒に保存
         accountlink = LineAccount(
@@ -195,15 +210,15 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
         accountlink.save()
         print("Success!")
         redirect_url = "https://access.line.me/dialog/bot/accountLink?linkToken={}&nonce={}".format(linkToken, nonce)
-        redirect(redirect_url)
-        profile = line_bot_api.get_profile(Line_user_id)
-        line_bot_api.push_message(
-            Line_user_id,
-            TextSendMessage(
-                        text = 
-                            "接続に成功しました。\nこんにちは。{}/{}さん！\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name, username)
-            )
-        )
+        return redirect(redirect_url)
+        #profile = line_bot_api.get_profile(Line_user_id)
+        #line_bot_api.push_message(
+        #    Line_user_id,
+        #    TextSendMessage(
+        #                text = 
+        #                    "接続に成功しました。\nこんにちは。{}/{}さん！\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name, username)
+        #    )
+        #)
     
     else:
         form = LineLinkForm()
