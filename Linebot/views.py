@@ -77,10 +77,12 @@ def handle_message(event, request):
         profile.delete()
         messages = TextSendMessage(text="接続解除しました。")
     elif event.message.text == "ステータス":
-        if LineAccount.objects.get(line_userid=Line_user_id):
-            profile = LineAccount.objects.get(line_userid=Line_user_id)
-            messages = TextSendMessage(text="あなたのLINEアカウントはOGR^2との接続が完了しています。") 
-        messages = TextSendMessage(text="あなたのLINEアカウントはOGR^2と未連携です。")
+        try:
+            account = LineAccount.objects.get(line_userid=Line_user_id)
+            profile = line_bot_api.get_profile(Line_user_id)
+            messages = TextSendMessage(text="こんにちは。\n{}/{}さん\nあなたのLINEアカウントはOGR^2との接続が完了しています。".format(profile.display_name, account.user.username))
+        except:
+            messages = TextSendMessage(text="あなたのLINEアカウントはOGR^2と未連携です。")
     else:
         messages = Normal_Reply_Message()
 
