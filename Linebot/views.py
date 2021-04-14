@@ -62,9 +62,9 @@ def callback(request):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event, request):
-    command = ["接続","新規登録","使い方","友達"]
+    command = ["接続","新規登録","使い方","友達","接続解除", "ステータス"]
+    Line_user_id = event.source.user_id
     if event.message.text == "接続":
-        Line_user_id = event.source.user_id
         messages = Connect_Django_and_Line(Line_user_id)
     elif event.message.text == "新規登録":
         messages = Make_Django_Account()
@@ -72,6 +72,15 @@ def handle_message(event, request):
         messages = TextSendMessage(text="How to use")
     elif event.message.text == "友達":
         messages = TextSendMessage(text="You have so many friends. I'm so jealous!")
+    elif event.message.text == "接続解除":
+        profile = LineAccount.objects.get(line_userid=Line_user_id)
+        profile.delete()
+        messages = TextSendMessage(text="接続解除しました。")
+    elif event.message.text == "ステータス":
+        if LineAccount.objects.get(line_userid=Line_user_id):
+            profile = LineAccount.objects.get(line_userid=Line_user_id)
+            messages = TextSendMessage(text="あなたのLINEアカウントはOGR^2との接続が完了しています。") 
+        messages = TextSendMessage(text="あなたのLINEアカウントはOGR^2と未連携です。")
     else:
         messages = Normal_Reply_Message()
 
