@@ -40,7 +40,8 @@ def my_customized_server_error(request, template_name='500.html'):
             'icon_emoji': ':jack_o_lantern:',
         })
     )
-    return HttpResponseServerError('<h1>Error occurred.</h1><br/><h3>Server Error (500)</h3><p>slack response code = {}</p>'.format(response))
+    print(response)
+    return HttpResponseServerError('<h1>Server Error (500)</h1><p>slack response code = {}</p>'.format(response.status_code))
 
 @login_required
 def top(request, user):
