@@ -226,7 +226,7 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
     
     else:
         form = LineLinkForm()
-    return render(request, 'Linebot/Accountlink.html')
+    return render(request, 'linebot/Accountlink.html')
 
 
 #5.アカウントを連携する
