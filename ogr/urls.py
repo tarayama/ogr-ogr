@@ -13,4 +13,3 @@ urlpatterns = [
     path('edit/<int:ogr_id>', views.edit, name='edit'),
     path('delete/<int:ogr_id>', views.delete, name='delete'),
 ]
-handler500 = views.my_customized_server_error

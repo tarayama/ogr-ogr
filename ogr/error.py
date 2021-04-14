@@ -35,7 +35,7 @@ def my_customized_server400_error(request, template_name='400.html'):
     ])
     status_code = Errorlog_post_to_Slack(text)
     print(status_code)
-    return HttpResponseServerError('<h1>Bad Request (400)</h1><p>slack response code = {}</p>'.format(status_code))
+    return HttpResponseBadRequest('<h1>Bad Request (400)</h1><p>slack response code = {}</p>'.format(status_code))
 
 @requires_csrf_token
 def my_customized_server403_error(request, template_name='403.html'):
@@ -46,7 +46,7 @@ def my_customized_server403_error(request, template_name='403.html'):
     ])
     status_code = Errorlog_post_to_Slack(text)
     print(status_code)
-    return HttpResponseServerError('<h1>Permissions Denied (403)</h1><p>slack response code = {}</p>'.format(status_code))
+    return HttpResponseForbidden('<h1>Permissions Denied (403)</h1><p>slack response code = {}</p>'.format(status_code))
 
 @requires_csrf_token
 def my_customized_server404_error(request, template_name='404.html'):
@@ -57,7 +57,7 @@ def my_customized_server404_error(request, template_name='404.html'):
     ])
     status_code = Errorlog_post_to_Slack(text)
     print(status_code)
-    return HttpResponseServerError('<h1>Page Not Found (404)</h1><p>slack response code = {}</p>'.format(status_code))
+    return HttpResponseNotFound('<h1>Page Not Found (404)</h1><p>slack response code = {}</p>'.format(status_code))
 
 @requires_csrf_token
 def my_customized_server500_error(request, template_name='500.html'):
