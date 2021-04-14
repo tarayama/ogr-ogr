@@ -147,7 +147,7 @@ def Redirect_UserLinkURL(Line_user_id, AccountLinkToken):
                 actions = [
                     URIAction(
                         label = "Account Link",
-                        uri = "http://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
+                        uri = "https://ogr-ogr.herokuapp.com/linebot/link/{}/{}".format(Line_user_id,AccountLinkToken)
                     )                    
                 ]
             )
