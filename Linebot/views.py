@@ -167,13 +167,15 @@ def MakeNonce(Line_user_id):
         print(i)
         if Line_user_id == i.line_userid:
             print("このLINEIDは既に登録されています。")
-            return line_bot_api.push_message(
+            line_bot_api.push_message(
                 Line_user_id,
                 TextSendMessage(
                             text = 
                                 "既にこのLINEIDは登録されています。登録解除する場合は「接続解除」またはブロックしてください。"
                 )
             )
+            nonce = "500"
+            return nonce
         if nonce == i.line_nonceToken:
             print("このnonceは他のユーザーのnonceとかぶっています。")
             MakeNonce()
@@ -201,6 +203,8 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
         #4.nonceを生成してユーザーをLINEプラットフォームにリダイレクトする
         nonce = MakeNonce(Line_user_id)
         print("nonce:",nonce)
+        if nonce == "500":
+            return HttpResponse('エラーが発生しました。既に登録されています。', status=400)                
         #nonceとユーザーを一緒に保存
         accountlink = LineAccount(
             user = request.user,
