@@ -1,17 +1,13 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from .models import LineAccount
-import urllib
 import json
 import secrets
 import requests
 import base64
-from ogr.models import Ogr_ogr, Friend
-from .forms import LineLinkForm
-
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -21,18 +17,10 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    SourceUser, SourceGroup, SourceRoom,
-    TemplateSendMessage, ConfirmTemplate, MessageAction,
-    ButtonsTemplate, ImageCarouselTemplate, ImageCarouselColumn, URIAction,
-    PostbackAction, DatetimePickerAction,
-    CameraAction, CameraRollAction, LocationAction,
-    CarouselTemplate, CarouselColumn, PostbackEvent,
-    StickerMessage, StickerSendMessage, LocationMessage, LocationSendMessage,
-    ImageMessage, VideoMessage, AudioMessage, FileMessage,
-    UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent, BeaconEvent,
-    FlexSendMessage, BubbleContainer, ImageComponent, BoxComponent,
-    TextComponent, SpacerComponent, IconComponent, ButtonComponent,
-    SeparatorComponent, QuickReply, QuickReplyButton
+    TemplateSendMessage,
+    ButtonsTemplate, URIAction,
+    PostbackEvent,
+    
 )
 import os
 
@@ -224,7 +212,7 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
         #    )
         #)
     
-    return render(request, 'Linebot/Accountlink.html')
+    return render(request, 'Linebot/Accountlink.html', {})
 
 
 #5.アカウントを連携する
