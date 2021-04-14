@@ -224,8 +224,6 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
         #    )
         #)
     
-    else:
-        form = LineLinkForm()
     return render(request, 'linebot/Accountlink.html')
 
 
