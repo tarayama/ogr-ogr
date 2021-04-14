@@ -212,7 +212,7 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
         #    )
         #)
     
-    return render(request, 'Linebot/Accountlink.html', {})
+    return render(request, 'Linebot/AccountLink.html', {})
 
 
 #5.アカウントを連携する
