@@ -26,7 +26,7 @@ def index(request):
 @requires_csrf_token
 def my_customized_server_error(request, template_name='500.html'):
     print(traceback.format_exc())
-    SlackURL = "https://hooks.slack.com/service/T018AUPM5RU/B01U2573P7G/bCC7RDlJoU8P1ycH0DiSTz7m"
+    SlackURL = 'https://hooks.slack.com/services/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'
     headers = { 'Content-type': 'application/json' }
     response = requests.post(
         SlackURL,
