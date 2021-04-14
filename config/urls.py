@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from ogr.error import my_customized_server400_error
+from ogr.error import my_customized_server403_error
+from ogr.error import my_customized_server404_error
+from ogr.error import my_customized_server500_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +29,8 @@ urlpatterns = [
     path('api/', include('api.urls')),
 ]
 
-from ogr.views import my_customized_server_error
 
-handler500 = my_customized_server_error
+handler500 = my_customized_server400_error
+handler500 = my_customized_server403_error
+handler500 = my_customized_server404_error
+handler500 = my_customized_server500_error
