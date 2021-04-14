@@ -101,16 +101,15 @@ def Normal_Reply_Message():
 
 def Make_Django_Account():
     messages = TemplateSendMessage(
-            alt_text="OGR^2",
-            template=ButtonsTemplate(
-                text="こちらからアカウントを作成してください。\nGoogle Accountをお持ちの方ログインページからそのアカウントを使ってログインすることもできます。",
-                title="新規登録",
-                actions=[
-                    {
-                        "type": "uri",
-                        "label": "新規登録",
-                        "uri": "https://ogr-ogr.herokuapp.com/accounts/signup"
-                    }
+            alt_text = "Register account",
+            template = ButtonsTemplate(
+                text = "こちらから新規登録してください。\nログインページからGoogle Accountでログインすることもできます。",
+                title = "新規登録",
+                actions = [
+                    URIAction(
+                        label = "新規登録",
+                        uri = "http://ogr-ogr.herokuapp.com/accounts/signup"
+                    )                    
                 ]
             )
         )
@@ -163,11 +162,8 @@ def MakeNonce():
     nonce = base64.b64encode(nonce)
     print("Make nonce:",nonce)
     noncelist = LineAccount.objects.all()
-    for i in noncelist:
-        if i.line_nonce != nonce:
-            break
-        else:
-            continue
+    if nonce in noncelist:
+        MakeNonce()
     return nonce
 
 def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
@@ -211,7 +207,7 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
     
     else:
         form = LineLinkForm()
-    return render(request, 'Linebot/Accountlink.html', {'form': form})
+    return render(request, 'Linebot/Accountlink.html')
 
 
 #5.アカウントを連携する
