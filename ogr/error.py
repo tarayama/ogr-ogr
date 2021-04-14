@@ -33,9 +33,9 @@ def my_customized_server400_error(request, template_name='400.html'):
         f'Request uri: {request.build_absolute_uri()}',
         traceback.format_exc()
     ])
-    response = Errorlog_post_to_Slack(text)
-    print(response)
-    return HttpResponseServerError('<h1>Bad Request (400)</h1><p>slack response code = {}</p>'.format(response.status_code))
+    status_code = Errorlog_post_to_Slack(text)
+    print(status_code)
+    return HttpResponseServerError('<h1>Bad Request (400)</h1><p>slack response code = {}</p>'.format(status_code))
 
 @requires_csrf_token
 def my_customized_server403_error(request, template_name='403.html'):
@@ -44,9 +44,9 @@ def my_customized_server403_error(request, template_name='403.html'):
         f'Request uri: {request.build_absolute_uri()}',
         traceback.format_exc()
     ])
-    response = Errorlog_post_to_Slack(text)
-    print(response)
-    return HttpResponseServerError('<h1>Permissions Denied (403)</h1><p>slack response code = {}</p>'.format(response.status_code))
+    status_code = Errorlog_post_to_Slack(text)
+    print(status_code)
+    return HttpResponseServerError('<h1>Permissions Denied (403)</h1><p>slack response code = {}</p>'.format(status_code))
 
 @requires_csrf_token
 def my_customized_server404_error(request, template_name='404.html'):
@@ -55,9 +55,9 @@ def my_customized_server404_error(request, template_name='404.html'):
         f'Request uri: {request.build_absolute_uri()}',
         traceback.format_exc()
     ])
-    response = Errorlog_post_to_Slack(text)
-    print(response)
-    return HttpResponseServerError('<h1>Page Not Found (404)</h1><p>slack response code = {}</p>'.format(response.status_code))
+    status_code = Errorlog_post_to_Slack(text)
+    print(status_code)
+    return HttpResponseServerError('<h1>Page Not Found (404)</h1><p>slack response code = {}</p>'.format(status_code))
 
 @requires_csrf_token
 def my_customized_server500_error(request, template_name='500.html'):
@@ -66,6 +66,6 @@ def my_customized_server500_error(request, template_name='500.html'):
         f'Request uri: {request.build_absolute_uri()}',
         traceback.format_exc()
     ])
-    response = Errorlog_post_to_Slack(text)
-    print(response)
-    return HttpResponseServerError('<h1>Server Error (500)</h1><p>slack response code = {}</p>'.format(response.status_code))
+    status_code = Errorlog_post_to_Slack(text)
+    print(status_code)
+    return HttpResponseServerError('<h1>Server Error (500)</h1><p>slack response code = {}</p>'.format(status_code))

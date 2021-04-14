@@ -23,7 +23,6 @@ except:
 # Create your views here.
 def index(request):
     #ログイン前トップ
-    aaaa
     if request.user.is_authenticated:
         return redirect('top', request.user)
     return render(request, 'ogr/index.html', {})
