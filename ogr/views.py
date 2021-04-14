@@ -28,7 +28,7 @@ def my_customized_server_error(request, template_name='500.html'):
     print(traceback.format_exc())
     SlackURL = "https://hooks.slack.com/service/T018AUPM5RU/B01U2573P7G/bCC7RDlJoU8P1ycH0DiSTz7m"
     headers = { 'Content-type': 'application/json' }
-    requests.post(
+    response = requests.post(
         SlackURL,
         headers = headers,
         data = json.dumps({
@@ -40,7 +40,7 @@ def my_customized_server_error(request, template_name='500.html'):
             'icon_emoji': ':jack_o_lantern:',
         })
     )
-    return HttpResponseServerError('<h1>Server Error (500)になっています。</h1>')
+    return HttpResponseServerError('<h1>Error occurred.</h1><br/><h3>Server Error (500)</h3><p>slack response code = {}</p>'.format(response))
 
 @login_required
 def top(request, user):
