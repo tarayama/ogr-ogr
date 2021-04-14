@@ -13,6 +13,12 @@ from django.http import (
 import requests
 import json
 import traceback
+import os
+
+try:
+    import Linebot.environment_valiable
+except:
+    pass
 
 # Create your views here.
 def index(request):
@@ -26,10 +32,10 @@ def index(request):
 @requires_csrf_token
 def my_customized_server_error(request, template_name='500.html'):
     print(traceback.format_exc())
-    SlackURL = 'https://hooks.slack.com/services/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'
+    Slack_webhook_URL = os.environ['Slack_Webhook_url']
     headers = { 'Content-type': 'application/json' }
     response = requests.post(
-        SlackURL,
+        Slack_webhook_URL,
         headers = headers,
         data = json.dumps({
             'text': '\n'.join([
