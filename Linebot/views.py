@@ -73,9 +73,7 @@ def handle_message(event, request):
     elif event.message.text == "友達":
         messages = TextSendMessage(text="You have so many friends. I'm so jealous!")
     elif event.message.text == "接続解除":
-        profile = LineAccount.objects.get(line_userid=Line_user_id)
-        profile.delete()
-        messages = TextSendMessage(text="接続解除しました。")
+        messages = Disconnect_Django_and_Line(Line_user_id)
     elif event.message.text == "ステータス":
         try:
             account = LineAccount.objects.get(line_userid=Line_user_id)
@@ -212,24 +210,17 @@ def get_django_userid_and_redirect_line(request, Line_user_id, linkToken):
         )
         accountlink.save()
         print("Success!")
+        #5.アカウントを連携する
         redirect_url = "https://access.line.me/dialog/bot/accountLink?linkToken={}&nonce={}".format(linkToken, nonce)
         return redirect(redirect_url)
-        #profile = line_bot_api.get_profile(Line_user_id)
-        #line_bot_api.push_message(
-        #    Line_user_id,
-        #    TextSendMessage(
-        #                text = 
-        #                    "接続に成功しました。\nこんにちは。{}/{}さん！\n接続解除する場合は「接続解除」と話してください。".format(profile.display_name, username)
-        #    )
-        #)
-    
     return render(request, 'Linebot/AccountLink.html', {})
 
-
-#5.アカウントを連携する
-
-def Disconnect_Django_and_Line():
-    return 0
+#DjangoとLINEの接続解除
+def Disconnect_Django_and_Line(Line_user_id):
+    profile = LineAccount.objects.get(line_userid=Line_user_id)
+    profile.delete()
+    messages = TextSendMessage(text="接続解除しました。")
+    return messages
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
