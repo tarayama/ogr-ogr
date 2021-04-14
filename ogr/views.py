@@ -32,7 +32,7 @@ def index(request):
 @requires_csrf_token
 def my_customized_server_error(request, template_name='500.html'):
     print(traceback.format_exc())
-    Slack_webhook_URL = os.environ['Slack_Webhook_url']
+    Slack_webhook_URL = os.environ['Slack_Webhook_URL']
     headers = { 'Content-type': 'application/json' }
     response = requests.post(
         Slack_webhook_URL,
