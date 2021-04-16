@@ -1,5 +1,6 @@
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 import io
 
 class FriendEvent():
@@ -41,6 +42,7 @@ class FriendEvent():
 
     
     def plot(self, datelist, moneylist, friendname):
+        fontprop = FontProperties(fname='static/ipaexg00401/ipaexg.ttf', size=10)
         totalmoney = self.getTotalMoneyList(moneylist)
         plt.rcParams['font.family'] = 'Yu Mincho'
         matplotlib.use('Agg')

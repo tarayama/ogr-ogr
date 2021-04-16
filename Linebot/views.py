@@ -118,7 +118,7 @@ def Connect_Django_and_Line(Line_user_id):
     Redirect_UserLinkURL(Line_user_id, AccountLinkToken)
     #接続中メッセージを送信する。
     profile = line_bot_api.get_profile(Line_user_id)
-    messages = TextSendMessage(text = "接続中です")
+    messages = TextSendMessage(text = "接続中です\n接続が完了したら「ステータス」と話しかけて完了を確認してください。")
     return messages
 
 #1.連携トークンを発行する
