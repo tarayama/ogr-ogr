@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
+from ogr.models import Ogr_ogr, Friend
+from ogr.plot import *
 from .models import LineAccount
 import json
 import secrets
@@ -17,9 +19,9 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage,
+    TemplateSendMessage, ImageSendMessage,
     ButtonsTemplate, URIAction,
-    PostbackEvent,
+    PostbackEvent, PostbackTemplateAction
     
 )
 import os
@@ -71,7 +73,7 @@ def handle_message(event, request):
     elif event.message.text == "使い方":
         messages = TextSendMessage(text="How to use")
     elif event.message.text == "友達":
-        messages = TextSendMessage(text="You have so many friends. I'm so jealous!")
+        messages = reply_FriendList(Line_user_id)
     elif event.message.text == "接続解除":
         messages = Disconnect_Django_and_Line(Line_user_id)
     elif event.message.text == "ステータス":
@@ -222,15 +224,75 @@ def Disconnect_Django_and_Line(Line_user_id):
     messages = TextSendMessage(text="接続解除しました。")
     return messages
 
+def reply_FriendList(Line_user_id):
+    account = LineAccount.objects.get(line_userid=Line_user_id)
+    try:
+        friend_list = Friend.objects.filter(user=account.user)
+        actions = []
+        for friend in friend_list:
+            actions.append(
+                PostbackTemplateAction(
+                    label = friend.name,
+                    data = friend.name
+                    )
+            )
+        actions.append(
+            URIAction(
+                label = "友達登録",
+                uri = "https://ogr-ogr.herokuapp.com/addfriend"
+            )    
+        )
+        message = TemplateSendMessage(
+            alt_text = "友達を選択してください",
+            template = ButtonsTemplate(
+                text = "グラフを表示したい友達を選択してください",
+                title = "友達一覧",
+                actions = actions
+            )
+        )
+    except:
+        message = TemplateSendMessage(
+            alt_text = "友達登録",
+            template = ButtonsTemplate(
+                text = "こちらから友達の登録を行ってください",
+                title = "友達が登録されていません",
+                actions = [
+                    URIAction(
+                        label = "友達登録",
+                        uri = "https://ogr-ogr.herokuapp.com/addfriend"
+                    )                    
+                ]
+            )
+        )
+    return message
+
+#友人との貸し借り金額のグラフを返す
+def reply_FriendMoneyPlot(Line_user_id, postbackdata):
+    account = LineAccount.objects.get(line_userid=Line_user_id)
+    friend_list = Friend.objects.filter(user=account.user)
+    for friend in friend_list:
+        if postbackdata == friend.name:
+            friendevent = Ogr_ogr.objects.filter(friends_name__name=friend.name)
+            event = FriendEvent(friendevent)
+            datelist = event.getDatelist()
+            datelist = list(dict.fromkeys(datelist))
+            moneylist = event.getMoneyList()
+            png = event.plot(datelist, moneylist, friend.name)
+        image_message = ImageSendMessage(
+            original_content_url = png,
+            preview_image_url = png
+        )
+        return image_message
+
 @handler.add(PostbackEvent)
 def handle_postback(event):
-
-    UserID = event.source.user_id
-    if event.postback.data == 'addfriend':
+    Line_user_id = event.source.user_id
+    postbackdata = event.postback.data
+    if postbackdata == '友達登録':
         pass
 
-    elif event.postback.data == 'friendslist':
-        pass
+    else:
+        reply_FriendMoneyPlot(Line_user_id, postbackdata)
 
     
 
