@@ -233,6 +233,8 @@ def reply_FriendList(Line_user_id):
         actions = []
         counter = 0
         for friend in friend_list:
+            print("friend_name", friend.name)
+
             if counter == 4:
                 columns.append(
                     CarouselColumn(
@@ -246,8 +248,8 @@ def reply_FriendList(Line_user_id):
                 counter = 0
             actions.append(
                 PostbackAction(
-                    label=friend.name.encode('utf-8'),
-                    data=friend.name.encode('utf-8')
+                    label=friend.name.decode('shift-jis').encode('utf-8'),
+                    data=friend.name.decode('shift-jis').encode('utf-8')
                 )
             )
             counter += 1
