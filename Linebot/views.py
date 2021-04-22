@@ -21,7 +21,8 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
     TemplateSendMessage, ImageSendMessage,
     ButtonsTemplate, URIAction,
-    PostbackEvent, PostbackTemplateAction
+    PostbackEvent, PostbackTemplateAction,
+    CarouselTemplate, CarouselColumn, PostbackAction
     
 )
 import os
@@ -225,34 +226,49 @@ def Disconnect_Django_and_Line(Line_user_id):
     return messages
 
 def reply_FriendList(Line_user_id):
-    account = LineAccount.objects.get(line_userid=Line_user_id)
     try:
+        account = LineAccount.objects.get(line_userid=Line_user_id)
         friend_list = Friend.objects.filter(user=account.user)
-        #actions = []
-        #for friend in friend_list:
-        #    actions.append(
-        ##        PostbackTemplateAction(
-        #            label = friend.name,
-        ##            data = friend.name
-        #            )
-        #    )
-        #actions.append(
-        #    URIAction(
-        #        label = "友達登録",
-        #        uri = "https://ogr-ogr.herokuapp.com/addfriend"
-        #    )    
-        #)
-        message = TemplateSendMessage(
-            alt_text = "友達を選択してください",
-            template = ButtonsTemplate(
+        columns = []
+        actions = []
+        counter = 0
+        for friend in friend_list:
+            if counter == 4:
+                columns.append(
+                    CarouselColumn(
+                        text = "グラフを表示したい友達を選択してください",
+                        title = "友達一覧",
+                        actions = actions
+                    )
+                )
+                actions = []
+                counter = 0
+            actions.append(
+                PostbackAction(
+                    label=friend.name,
+                    data=friend.name
+                )
+            )
+            counter += 1
+        actions.append(
+            URIAction(
+                label = "友達登録",
+                uri = "https://ogr-ogr.herokuapp.com/addfriend"
+            )    
+        )
+        columns.append(
+            CarouselColumn(
                 text = "グラフを表示したい友達を選択してください",
                 title = "友達一覧",
-                actions  = [
-                    PostbackTemplateAction(
-                    label = friend.name,
-                    data = friend.name
-                    ) for friend in friend_list
-                ]
+                actions = actions
+            )
+        )
+
+        friend_list = list(Friend.objects.filter(user=account.user))
+        message = TemplateSendMessage(
+            alt_text = "友達を選択してください",
+            template = CarouselTemplate(
+                columns = columns
             )
         )
     except:
@@ -260,7 +276,7 @@ def reply_FriendList(Line_user_id):
             alt_text = "友達登録",
             template = ButtonsTemplate(
                 text = "こちらから友達の登録を行ってください",
-                title = "友達が登録されていません",
+                title = "現在あなたの友達が登録されていません",
                 actions = [
                     URIAction(
                         label = "友達登録",
