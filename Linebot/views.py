@@ -246,8 +246,8 @@ def reply_FriendList(Line_user_id):
                 counter = 0
             actions.append(
                 PostbackAction(
-                    label=friend.name,
-                    data=friend.name
+                    label=friend.name.encode('utf-8'),
+                    data=friend.name.encode('utf-8')
                 )
             )
             counter += 1
