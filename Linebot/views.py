@@ -241,6 +241,7 @@ def reply_FriendList(Line_user_id):
                         actions = actions
                     )
                 )
+                print("actions", actions)
                 actions = []
                 counter = 0
             actions.append(
@@ -263,6 +264,9 @@ def reply_FriendList(Line_user_id):
                 actions = actions
             )
         )
+        print("actions", actions)
+        print("columns", columns)
+        
 
         friend_list = list(Friend.objects.filter(user=account.user))
         message = TemplateSendMessage(
