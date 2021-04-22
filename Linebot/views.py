@@ -228,26 +228,31 @@ def reply_FriendList(Line_user_id):
     account = LineAccount.objects.get(line_userid=Line_user_id)
     try:
         friend_list = Friend.objects.filter(user=account.user)
-        actions = []
-        for friend in friend_list:
-            actions.append(
-                PostbackTemplateAction(
-                    label = friend.name,
-                    data = friend.name
-                    )
-            )
-        actions.append(
-            URIAction(
-                label = "友達登録",
-                uri = "https://ogr-ogr.herokuapp.com/addfriend"
-            )    
-        )
+        #actions = []
+        #for friend in friend_list:
+        #    actions.append(
+        ##        PostbackTemplateAction(
+        #            label = friend.name,
+        ##            data = friend.name
+        #            )
+        #    )
+        #actions.append(
+        #    URIAction(
+        #        label = "友達登録",
+        #        uri = "https://ogr-ogr.herokuapp.com/addfriend"
+        #    )    
+        #)
         message = TemplateSendMessage(
             alt_text = "友達を選択してください",
             template = ButtonsTemplate(
                 text = "グラフを表示したい友達を選択してください",
                 title = "友達一覧",
-                actions = actions
+                actions  = [
+                    PostbackTemplateAction(
+                    label = friend.name,
+                    data = friend.name
+                    ) for friend in friend_list
+                ]
             )
         )
     except:
@@ -292,7 +297,11 @@ def handle_postback(event):
         pass
 
     else:
-        reply_FriendMoneyPlot(Line_user_id, postbackdata)
+        messages = reply_FriendMoneyPlot(Line_user_id, postbackdata)
+    reply = line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+    return reply
 
     
 
