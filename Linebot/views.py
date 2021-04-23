@@ -233,27 +233,31 @@ def reply_FriendList(Line_user_id):
         columns = []
         actions = []
         counter = 0
-        #for friend in friend_list:
-        #    print("friend_name", friend.name)
-        #
-        #    if counter == 4:
-        #        columns.append(
-        #            CarouselColumn(
-        #                text = "グラフを表示したい友達を選択してください",
-        #                title = "友達一覧",
-        #                actions = actions
-        #            )
-        #        )
-        #        print("actions", actions)
-        #        actions = []
-        #        counter = 0
-        #    actions.append(
-        #        PostbackAction(
-        #            label=friend.name,
-        #            data=friend.name
-        #        )
-        #    )
-        #    counter += 1
+        for friend in friend_list:
+            print("friend_name", friend.name)
+        
+            columns.append(
+                CarouselColumn(
+                    text = "グラフを表示したい友達を選択してください",
+                    title = "友達一覧",
+                    actions = [
+                        PostbackAction(
+                            label=friend.name,
+                            data=friend.name
+                        )
+                    ]
+                )
+            )
+            #print("actions", actions)
+            #actions = []
+            #counter = 0
+            #actions.append(
+            #    PostbackAction(
+            #        label=friend.name,
+            #        data=friend.name
+            #    )
+            #)
+            #counter += 1
         actions.append(
             URIAction(
                 label = "友達登録",
