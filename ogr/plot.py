@@ -42,14 +42,13 @@ class FriendEvent():
 
     
     def plot(self, datelist, moneylist, friendname):
-        fontprop = FontProperties(fname='static/ipaexg00401/ipaexg.ttf', size=10)
         totalmoney = self.getTotalMoneyList(moneylist)
         plt.rcParams['font.family'] = 'Yu Mincho'
         matplotlib.use('Agg')
         plt.bar(datelist, moneylist)
         plt.plot(datelist, totalmoney, color='red')
-        plt.xlabel("Date", fontprop)
-        plt.ylabel("Money", fontprop)
+        plt.xlabel("Date")
+        plt.ylabel("Money")
         plt.xticks(rotation=45)
         plt.grid(True)
         title = "{} money log".format(friendname)
