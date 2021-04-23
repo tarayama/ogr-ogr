@@ -12,11 +12,11 @@ from django.views.decorators.csrf import requires_csrf_token
 def index(request):
     #ログイン前トップ
     if request.user.is_authenticated:
-        return redirect('top', request.user)
+        return redirect('top')
     return render(request, 'ogr/index.html', {})
 
 @login_required
-def top(request, user):
+def top(request):
     #ログイン後トップ
     ogr_list = Ogr_ogr.objects.filter(user=request.user).order_by('-date')
     context = {'ogr_list': ogr_list }
@@ -42,7 +42,7 @@ def edit(request, ogr_id):
     return render(request, 'ogr/edit.html',context)
 
 
-def my_page(request, user):
+def my_page(request):
     #マイページ
     ogr_list = Ogr_ogr.objects.filter(user=request.user)
     friend_list = Friend.objects.filter(user=request.user)
@@ -69,7 +69,7 @@ def addfriend(request):
                 
             
                 
-        return redirect('top', request.user)
+        return redirect('top')
     return render(request, 'ogr/addfriend.html', {})
 
 
@@ -112,9 +112,11 @@ def delete(request, ogr_id):
     ogr_detail.delete() 
     return redirect('top', request.user)
 
-def plot_log(request, user, friendname):
+def plot_log(request, friendid):
     try:
-        friendevent = Ogr_ogr.objects.filter(friends_name__name=friendname)
+        friendevent = Ogr_ogr.objects.filter(friends_name__id=friendid)
+        friend = Friend.objects.get(id=friendid)
+        friendname = friend.name
     except:
         return HttpResponse("There is no event")
     event = FriendEvent(friendevent)
@@ -125,8 +127,10 @@ def plot_log(request, user, friendname):
     png = event.plot(datelist, moneylist, friendname)
     return HttpResponse(png, content_type='image/png')    
 
-def friend_log(request, user, friendname):
-    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__name=friendname)
+def friend_log(request, friendid):
+    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
+    friend = Friend.objects.get(id=friendid)
+    friendname = friend.name
     friend = Friend.objects.get(user=request.user, name=friendname)
     event = FriendEvent(ogr_list)
     totalmoney = event.getTotalMoney()

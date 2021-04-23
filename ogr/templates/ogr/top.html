@@ -28,11 +28,11 @@
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'top' user %}">Home<span
+                                    <a class="nav-link" href="{% url 'top' %}">Home<span
                                             class="sr-only">(current)</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'my_page' user %}">マイページ</a>
+                                    <a class="nav-link" href="{% url 'my_page' %}">マイページ</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'create_log' %}">記録の追加</a>
@@ -41,13 +41,13 @@
                         </div>
                     </button>
                 </span>
-                <a class="navbar-brand" href="{% url 'top' user %}">OGR^2</a>
+                <a class="navbar-brand" href="{% url 'top' %}">OGR^2</a>
             </div>
         </div>
     </nav>
 
     <p style="text-align:right;">こんにちは {{ user.username }}さん!
-        <a class="navbar-text" href="{% url 'my_page' user %}">my_page</a>
+        <a class="navbar-text" href="{% url 'my_page' %}">my_page</a>
         <a class="navbar-text" href="{% url 'logout' %}">logout</a>
     </p>
     <h3>貸し借り記録</h3>

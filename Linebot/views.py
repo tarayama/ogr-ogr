@@ -291,7 +291,7 @@ def reply_FriendMoneyPlot(Line_user_id, postbackdata):
     friend_list = Friend.objects.filter(user=account.user)
     for friend in friend_list:
         if postbackdata == friend.name:
-            imgurl = "https://ogr-ogr.herokuapp.com/mypage/{}/friends/{}/plot".format(account.user.username, friend.name)
+            imgurl = "https://ogr-ogr.herokuapp.com/mypage/friends/{}/plot".format(friend.id)
             print("image url:", imgurl)
             image_message = ImageSendMessage(
                 original_content_url = imgurl,
