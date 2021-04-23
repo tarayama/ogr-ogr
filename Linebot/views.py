@@ -312,8 +312,8 @@ def reply_FriendMoneyPlot(Line_user_id, postbackdata):
             moneylist = event.getMoneyList()
             png = event.plot(datelist, moneylist, friend.name)
             image_message = ImageSendMessage(
-                original_content_url = png,
-                preview_image_url = png
+                original_content_url = 'https://ogr-ogr.herokuapp.com/mypage/{}/friends/{}/plot'.format(account.user.name, friend.name),
+                preview_image_url = 'https://ogr-ogr.herokuapp.com/mypage/{}/friends/{}/plot'.format(account.user.name, friend.name)
             )
             break
     return image_message
