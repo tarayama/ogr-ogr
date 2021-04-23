@@ -291,12 +291,6 @@ def reply_FriendMoneyPlot(Line_user_id, postbackdata):
     friend_list = Friend.objects.filter(user=account.user)
     for friend in friend_list:
         if postbackdata == friend.name:
-            friendevent = Ogr_ogr.objects.filter(friends_name__name=friend.name)
-            event = FriendEvent(friendevent)
-            datelist = event.getDatelist()
-            datelist = list(dict.fromkeys(datelist))
-            moneylist = event.getMoneyList()
-            png = event.plot(datelist, moneylist, friend.name)
             imgurl = "https://ogr-ogr.herokuapp.com/mypage/{}/friends/{}/plot".format(account.user.username, friend.name)
             print("image url:", imgurl)
             image_message = ImageSendMessage(
