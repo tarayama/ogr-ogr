@@ -231,8 +231,6 @@ def reply_FriendList(Line_user_id):
         account = LineAccount.objects.get(line_userid=Line_user_id)
         friend_list = Friend.objects.filter(user=account.user)
         columns = []
-        actions = []
-        counter = 0
         for friend in friend_list:
             print("friend_name", friend.name)
         
@@ -248,32 +246,20 @@ def reply_FriendList(Line_user_id):
                     ]
                 )
             )
-            #print("actions", actions)
-            #actions = []
-            #counter = 0
-            #actions.append(
-            #    PostbackAction(
-            #        label=friend.name,
-            #        data=friend.name
-            #    )
-            #)
-            #counter += 1
-        actions.append(
-            URIAction(
-                label = "友達登録",
-                uri = "https://ogr-ogr.herokuapp.com/addfriend"
-            )    
-        )
+            
         columns.append(
             CarouselColumn(
                 text = "グラフを表示したい友達を選択してください",
                 title = "友達一覧",
-                actions = actions
+                actions = [
+                    URIAction(
+                        label = "友達登録",
+                        uri = "https://ogr-ogr.herokuapp.com/addfriend"
+                    )
+                ]
             )
         )
-        print("actions", actions)
-        print("columns", columns)
-        
+        #print("columns", columns)
 
         friend_list = list(Friend.objects.filter(user=account.user))
         message = TemplateSendMessage(
@@ -312,8 +298,8 @@ def reply_FriendMoneyPlot(Line_user_id, postbackdata):
             moneylist = event.getMoneyList()
             png = event.plot(datelist, moneylist, friend.name)
             image_message = ImageSendMessage(
-                original_content_url = 'https://ogr-ogr.herokuapp.com/mypage/{}/friends/{}/plot'.format(account.user.name, friend.name),
-                preview_image_url = 'https://ogr-ogr.herokuapp.com/mypage/{}/friends/{}/plot'.format(account.user.name, friend.name)
+                original_content_url = 'https://example.com/original.jpg',
+                preview_image_url = 'https://example.com/preview.jpg'
             )
             break
     return image_message
