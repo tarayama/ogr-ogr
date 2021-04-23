@@ -311,11 +311,12 @@ def reply_FriendMoneyPlot(Line_user_id, postbackdata):
             datelist = list(dict.fromkeys(datelist))
             moneylist = event.getMoneyList()
             png = event.plot(datelist, moneylist, friend.name)
-        image_message = ImageSendMessage(
-            original_content_url = png,
-            preview_image_url = png
-        )
-        return image_message
+            image_message = ImageSendMessage(
+                original_content_url = png,
+                preview_image_url = png
+            )
+            break
+    return image_message
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
