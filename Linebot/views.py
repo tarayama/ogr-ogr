@@ -293,6 +293,14 @@ def reply_FriendMoneyPlot(Line_user_id, postbackdata):
         if postbackdata == friend.name:
             imgurl = "https://ogr-ogr.herokuapp.com/mypage/friends/{}/plot".format(friend.id)
             print("image url:", imgurl)
+            ogr_list = Ogr_ogr.objects.filter(user=account.user, friends_name__id=friend.id)
+            event = FriendEvent(ogr_list)
+            totalmoney = event.getTotalMoney()
+            text = "現在の{}さんとの貸し借り金額は、{}円です。".format(friend.name, totalmoney)
+            line_bot_api.push_message(
+                Line_user_id,
+                TextSendMessage(text=text)
+            )
             image_message = ImageSendMessage(
                 original_content_url = imgurl,
                 preview_image_url = imgurl
