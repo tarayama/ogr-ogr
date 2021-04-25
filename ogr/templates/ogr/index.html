@@ -39,7 +39,7 @@
                         </div>
                     </button>
                 </span>
-                <a class="navbar-brand" href="{% url 'top' user %}">OGR^2</a>
+                <a class="navbar-brand" href="{% url 'top' %}">OGR^2</a>
             </div>
         </div>
     </nav>
@@ -50,7 +50,7 @@
         {% if user.is_authenticated %}
         <br/>
         読み込み中です<<br/>
-        自動的に推移しない場合は<a href="{% url 'top' user %}">こちら</a><<br/>>
+        自動的に推移しない場合は<a href="{% url 'top' %}">こちら</a><<br/>>
         {% else %}
         <br />
         <br />
