@@ -1,3 +1,4 @@
+from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Ogr_ogr, Friend
@@ -12,6 +13,7 @@ from django.views.decorators.csrf import requires_csrf_token
 def index(request):
     #ログイン前トップ
     if request.user.is_authenticated:
+        aaa
         return redirect('top')
     return render(request, 'ogr/index.html', {})
 
@@ -96,7 +98,7 @@ def create_log(request):
 @login_required
 def detail(request, ogr_id):
     #詳細
-    ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
+    ogr_detail = Ogr_ogr.objects.get(user=request.user, pk=ogr_id)
     context = {'ogr_detail': ogr_detail }
     if request.method == 'POST':
         if request.POST['solution'] == '1':
@@ -110,19 +112,20 @@ def detail(request, ogr_id):
 @login_required
 def delete(request, ogr_id):
     #記録の削除
-    ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
+    ogr_detail = Ogr_ogr.objects.get(user=request.user, pk=ogr_id)
     ogr_detail.delete() 
     return redirect('top', request.user)
 
 
 def plot_log(request, friendid):
     try:
-        friendevent = Ogr_ogr.objects.filter(friends_name__id=friendid)
-        friend = Friend.objects.get(id=friendid)
+        friendevent = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
+        friend = Friend.objects.get(user=request.user, id=friendid)
         friendname = friend.name
     except:
-        return HttpResponse("There is no event")
-    event = FriendEvent(friendevent)
+        return HttpResponse("Not Found (404)あなたのアカウントか指定された友達が見つかりません", status=404)
+    user = request.user
+    event = FriendEvent(user, friendevent)
     datelist = event.getDatelist()
     datelist = list(dict.fromkeys(datelist))
     moneylist = event.getMoneyList()
@@ -132,11 +135,20 @@ def plot_log(request, friendid):
 
 @login_required
 def friend_log(request, friendid):
-    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
-    friend = Friend.objects.get(id=friendid)
-    friendname = friend.name
-    friend = Friend.objects.get(user=request.user, name=friendname)
-    event = FriendEvent(ogr_list)
+    try:
+        ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
+        friend = Friend.objects.get(user=request.user, id=friendid)
+    except:
+        err_title = "エラーコード : 404"
+        err_subt = "指定された友達が見つかりませんでした"
+        err_msg = "内容をご確認の上再度お試しください"
+        context = {
+            'err_title' : err_title,
+            'err_subt' : err_subt,
+            'err_msg' : err_msg
+        }
+        return render(request, 'ogr/error.html', context)
+    event = FriendEvent(request.user, ogr_list)
     totalmoney = event.getTotalMoney()
     context = {
         'ogr_list' : ogr_list,

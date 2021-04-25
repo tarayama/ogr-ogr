@@ -30,16 +30,16 @@
                                             class="sr-only">(current)</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                                    <a class="nav-link" href="{% url 'login' %}">ログイン</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link disabled" href="{% url 'signup' %}">Signup</a>
+                                    <a class="nav-link" href="{% url 'signup' %}">新規登録</a>
                                 </li>
                             </ul>
                         </div>
                     </button>
                 </span>
-                <a class="navbar-brand" href="{% url 'top' %}">OGR^2</a>
+                <a class="navbar-brand" href="{% url 'index' %}">OGR^2</a>
             </div>
         </div>
     </nav>
@@ -49,8 +49,8 @@
       
         {% if user.is_authenticated %}
         <br/>
-        読み込み中です<<br/>
-        自動的に推移しない場合は<a href="{% url 'top' %}">こちら</a><<br/>>
+        読み込み中です<br/>
+        自動的に推移しない場合は<a href="{% url 'top' %}">こちら</a><br/>>
         {% else %}
         <br />
         <br />
