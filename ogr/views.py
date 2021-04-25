@@ -22,6 +22,7 @@ def top(request):
     context = {'ogr_list': ogr_list }
     return render(request, 'ogr/top.html', context)
 
+@login_required
 def edit(request, ogr_id):
     friend_list = Friend.objects.filter(user=request.user)
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
@@ -41,7 +42,7 @@ def edit(request, ogr_id):
         
     return render(request, 'ogr/edit.html',context)
 
-
+@login_required
 def my_page(request):
     #マイページ
     ogr_list = Ogr_ogr.objects.filter(user=request.user)
@@ -51,6 +52,7 @@ def my_page(request):
         'friend_list' : friend_list}
     return render(request, 'ogr/my_page.html', context)
 
+@login_required
 def addfriend(request):
     friend_list = Friend.objects.filter(user=request.user)
     context = {'friend_list': friend_list }
@@ -65,15 +67,13 @@ def addfriend(request):
             user = request.user,
             name = request.POST['friend']
         )
-        new_friend.save()
-                
-            
+        new_friend.save()   
                 
         return redirect('top')
     return render(request, 'ogr/addfriend.html', {})
 
 
-
+@login_required
 def create_log(request):
     #記録の作成
     friend_list = Friend.objects.filter(user=request.user)
@@ -93,6 +93,7 @@ def create_log(request):
         return redirect('top', request.user)
     return render(request, 'ogr/create_log.html', context)
 
+@login_required
 def detail(request, ogr_id):
     #詳細
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
@@ -106,11 +107,13 @@ def detail(request, ogr_id):
         return redirect('detail',ogr_id)
     return render(request, 'ogr/detail.html',context)
 
+@login_required
 def delete(request, ogr_id):
     #記録の削除
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
     ogr_detail.delete() 
     return redirect('top', request.user)
+
 
 def plot_log(request, friendid):
     try:
@@ -127,6 +130,7 @@ def plot_log(request, friendid):
     png = event.plot(datelist, moneylist, friendname)
     return HttpResponse(png, content_type='image/png')    
 
+@login_required
 def friend_log(request, friendid):
     ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
     friend = Friend.objects.get(id=friendid)
