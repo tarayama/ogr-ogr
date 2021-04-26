@@ -1,3 +1,4 @@
+from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Ogr_ogr, Friend
@@ -6,21 +7,23 @@ import matplotlib
 import matplotlib.pyplot as plt
 from .plot import *
 import io
+from django.views.decorators.csrf import requires_csrf_token
 
 # Create your views here.
 def index(request):
     #ログイン前トップ
     if request.user.is_authenticated:
-        return redirect('top', request.user)
+        return redirect('top')
     return render(request, 'ogr/index.html', {})
 
 @login_required
-def top(request, user):
+def top(request):
     #ログイン後トップ
     ogr_list = Ogr_ogr.objects.filter(user=request.user).order_by('-date')
     context = {'ogr_list': ogr_list }
     return render(request, 'ogr/top.html', context)
 
+@login_required
 def edit(request, ogr_id):
     friend_list = Friend.objects.filter(user=request.user)
     ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
@@ -40,8 +43,8 @@ def edit(request, ogr_id):
         
     return render(request, 'ogr/edit.html',context)
 
-
-def my_page(request, user):
+@login_required
+def my_page(request):
     #マイページ
     ogr_list = Ogr_ogr.objects.filter(user=request.user)
     friend_list = Friend.objects.filter(user=request.user)
@@ -50,6 +53,7 @@ def my_page(request, user):
         'friend_list' : friend_list}
     return render(request, 'ogr/my_page.html', context)
 
+@login_required
 def addfriend(request):
     friend_list = Friend.objects.filter(user=request.user)
     context = {'friend_list': friend_list }
@@ -64,15 +68,13 @@ def addfriend(request):
             user = request.user,
             name = request.POST['friend']
         )
-        new_friend.save()
+        new_friend.save()   
                 
-            
-                
-        return redirect('top', request.user)
+        return redirect('top')
     return render(request, 'ogr/addfriend.html', {})
 
 
-
+@login_required
 def create_log(request):
     #記録の作成
     friend_list = Friend.objects.filter(user=request.user)
@@ -92,9 +94,10 @@ def create_log(request):
         return redirect('top', request.user)
     return render(request, 'ogr/create_log.html', context)
 
+@login_required
 def detail(request, ogr_id):
     #詳細
-    ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
+    ogr_detail = Ogr_ogr.objects.get(user=request.user, pk=ogr_id)
     context = {'ogr_detail': ogr_detail }
     if request.method == 'POST':
         if request.POST['solution'] == '1':
@@ -105,18 +108,23 @@ def detail(request, ogr_id):
         return redirect('detail',ogr_id)
     return render(request, 'ogr/detail.html',context)
 
+@login_required
 def delete(request, ogr_id):
     #記録の削除
-    ogr_detail = Ogr_ogr.objects.get(pk=ogr_id)
+    ogr_detail = Ogr_ogr.objects.get(user=request.user, pk=ogr_id)
     ogr_detail.delete() 
     return redirect('top', request.user)
 
-def plot_log(request, user, friendname):
+
+def plot_log(request, friendid):
     try:
-        friendevent = Ogr_ogr.objects.filter(friends_name__name=friendname)
+        friendevent = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
+        friend = Friend.objects.get(user=request.user, id=friendid)
+        friendname = friend.name
     except:
-        return HttpResponse("There is no event")
-    event = FriendEvent(friendevent)
+        return HttpResponse("Not Found (404)あなたのアカウントか指定された友達が見つかりません", status=404)
+    user = request.user
+    event = FriendEvent(user, friendevent)
     datelist = event.getDatelist()
     datelist = list(dict.fromkeys(datelist))
     moneylist = event.getMoneyList()
@@ -124,10 +132,11 @@ def plot_log(request, user, friendname):
     png = event.plot(datelist, moneylist, friendname)
     return HttpResponse(png, content_type='image/png')    
 
-def friend_log(request, user, friendname):
-    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__name=friendname)
-    friend = Friend.objects.get(user=request.user, name=friendname)
-    event = FriendEvent(ogr_list)
+@login_required
+def friend_log(request, friendid): 
+    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
+    friend = Friend.objects.get(user=request.user, id=friendid)
+    event = FriendEvent(request.user, ogr_list)
     totalmoney = event.getTotalMoney()
     context = {
         'ogr_list' : ogr_list,

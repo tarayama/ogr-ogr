@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from ogr.error import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,3 +25,9 @@ urlpatterns = [
     path('linebot/',include('Linebot.urls')),
     path('api/', include('api.urls')),
 ]
+
+
+handler400 = my_customized_server400_error
+handler403 = my_customized_server403_error
+handler404 = my_customized_server404_error
+handler500 = my_customized_server500_error

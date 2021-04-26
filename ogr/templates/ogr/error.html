@@ -1,0 +1,15 @@
+{% extends "ogr/base.html" %}
+{% block content %}
+<section>
+    <div class="card border-dark mb-3 control mx-auto w-75">
+        <div class="card-header">{{ err_title }}</div>
+        <div class="card-body text-dark">
+            <h5 class="card-title"><strong>{{ err_subt }}</strong></h5>
+            <p class="card-text">{{ err_msg }}</p>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-info" href="{% url 'top' %}">ホームに戻る</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

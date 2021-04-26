@@ -1,9 +1,11 @@
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 import io
 
-class FriendEvent():
-    def __init__(self, friendevent):
+class FriendEvent:
+    def __init__(self, user, friendevent):
+        self.user = user
         self.event = friendevent
     
     def getMoneyDateDict(self):

@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xcm!a&jjni_+^yow)srd(b@*v05=x$vddx*2d3tu*#795-ytjw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -62,7 +61,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR,'templates')
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,8 +151,12 @@ LOGOUT_REDIRECT_URL = 'index'
 if not DEBUG:
     import django_heroku
     django_heroku.settings(locals())
+    #SECRET_KEY = os.environ['SECRET_KEY']
+    #LINE_CHANNEL_ACCESS_TOKEN = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
+    #LINE_CHANNEL_SECRET = os.environ['LINE_CHANNEL_SECRET']
 
 try:
     from .local_settings import *
 except ImportError:
     pass
+
