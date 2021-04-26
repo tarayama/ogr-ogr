@@ -13,7 +13,6 @@ from django.views.decorators.csrf import requires_csrf_token
 def index(request):
     #ログイン前トップ
     if request.user.is_authenticated:
-        aaa
         return redirect('top')
     return render(request, 'ogr/index.html', {})
 
@@ -134,20 +133,9 @@ def plot_log(request, friendid):
     return HttpResponse(png, content_type='image/png')    
 
 @login_required
-def friend_log(request, friendid):
-    try:
-        ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
-        friend = Friend.objects.get(user=request.user, id=friendid)
-    except:
-        err_title = "エラーコード : 404"
-        err_subt = "指定された友達が見つかりませんでした"
-        err_msg = "内容をご確認の上再度お試しください"
-        context = {
-            'err_title' : err_title,
-            'err_subt' : err_subt,
-            'err_msg' : err_msg
-        }
-        return render(request, 'ogr/error.html', context)
+def friend_log(request, friendid): 
+    ogr_list = Ogr_ogr.objects.filter(user=request.user, friends_name__id=friendid)
+    friend = Friend.objects.get(user=request.user, id=friendid)
     event = FriendEvent(request.user, ogr_list)
     totalmoney = event.getTotalMoney()
     context = {

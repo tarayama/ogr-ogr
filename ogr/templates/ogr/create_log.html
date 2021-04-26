@@ -2,10 +2,10 @@
 {% block content %}
 <section>
     <div>
-        <h3>貸し借り記録の追加</h3>
+        <h3 class="text-center">貸し借り記録の追加</h3>
         <br/>
     
-        <form action="{% url 'create_log' %}" class="form-horizo​​ntal" method="POST">
+        <form action="{% url 'create_log' %}" class="form-horizo​​ntal text-center" method="POST">
             {% csrf_token %}
             <div class="table-condensed">
             

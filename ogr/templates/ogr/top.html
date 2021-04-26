@@ -1,77 +1,82 @@
 {% extends "ogr/base.html" %}
 {% block content %}
+<div class="text-center">
     <h3>貸し借り記録</h3>
-    <main class="p-3">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a href="#card11" class="nav-link active" data-toggle="tab">Card</a>
-            </li>
-            <li class="nav-item">
-                <a href="#table11" class="nav-link" data-toggle="tab">Table</a>
-            </li>
-        </ul>
 
-        <div class="tab-content">
-            <div id="card11" class="tab-pane active">
-                <div class="container">
-                    <div class="row">
-                        {% if ogr_list %}
-                        {% for ogr in ogr_list %}
-                        <div class="col-xl col-lg col-md col-sm col-xs mx-auto">
-                            <div class="card" style="width: 18rem;">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="card-tab" data-bs-toggle="tab" href="#card" role="tab" aria-controls="card" aria-selected="true">Card</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="table-tab" data-bs-toggle="tab" href="#table" role="tab" aria-controls="table" aria-selected="false">Table</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+       
+        <br />
+        <div class="tab-pane fade show active" id="card" role="tabpanel" aria-labelledby="card-tab">
+            <h4 style="text-align:left;">カード表示</h4>
+            <div class="container">
+                <div class="row">
+
+                    {% if ogr_list %}
+                    {% for ogr in ogr_list %}
+                    <div class="col-xl col-lg col-md col-sm col-xs">
+                        <div class="col mx-auto" style="width: 18rem;">
+                            <div class="card text-center" style="width: 18rem;">
                                 <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            {{ ogr.title }}
-                                        </button>
-                                    </h5>
+                                    {{ ogr.title }}
                                 </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <h5 class="card-title"></h5>
-                                        <p class="card-text">{{ ogr.date }}に</p>
-                                        <p class="card-text">{{ ogr.friends_name }}さんに</p>
-                                        {% if ogr.money > 0 %}
-                                        <p class="card-text">{{ ogr.money }}円貸した</p>
-                                        {% else %}
-                                        <p class="card-text">{{ ogr.money }}円借りた</p>
-                                        {% endif %}
 
-                                        <a href="{% url 'detail' ogr.id %}" class="btn btn-primary">詳細</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        {% else %}
-                        <div class="col-xl col-lg col-md col-sm col-xs">
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-header">
-                                    いまだ貸し借りのしたことある人はいません
-                                </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">None</h5>
-                                    <p class="card-text"></p>
-                                    <p class="card-text"></p>
-                                    <p class="card-text"></p>
+                                    <h5 class="card-title"></h5>
+                                    <p class="card-text">{{ ogr.date }}</p>
+                                    <p class="card-text">{{ ogr.friends_name }}さんに</p>
+                                    <p class="card-text">{{ ogr.money }}円</p>
 
-                                    <p class="card-text"></p>
-                                    <p class="card-text"></p>
-
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    <a href="{% url 'detail' ogr.id %}" class="btn btn-primary">詳細</a>
                                 </div>
+
                             </div>
                         </div>
-                        <p class="card-text">いまだ貸し借りのしたことある人はいません</p>
-                        {% endif %}
                     </div>
+                    {% endfor %}
                 </div>
-            </div>
-            <div id="table11" class="tab-pane">
+                <br />
 
-                <div class="table-responsive">
+                {% else %}
+
+                <div class="col">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            いまだ貸し借りのしたことある人はいません
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">記録なし</h5>
+                            <p class="card-text"></p>
+                            <p class="card-text"></p>
+                            <p class="card-text"></p>
+
+                            <p class="card-text"></p>
+                            <p class="card-text"></p>
+
+                            <a href="{% url 'create_log' %}" class="btn btn-primary">記録の追加</a>
+                        </div>
+                    </div>
+
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <br />
+
+        <div class="tab-pane fade" id="table" role="tabpanel" aria-labelledby="table-tab">
+            <h4 style="text-align:left;">テーブル表示</h4>
+            <div class="container">
+                
+                <div class="table-responsive text-center">
                     <table class="table table-striped">
                         <tr>
                             <th class="text-nowrap">解決済み</th>
@@ -79,7 +84,7 @@
                             <th class="text-nowrap">タイトル</th>
                             <th class="text-nowrap">相手</th>
                             <th class="text-nowrap">金額</th>
-                            <th class="text-nowrap">借りたor貸した</th>
+
                         </tr>
                         {% if ogr_list %}
                         {% for ogr in ogr_list %}
@@ -93,11 +98,6 @@
                             <td><a href="{% url 'detail' ogr.id %}">{{ ogr.title }}</a></td>
                             <td>{{ ogr.friends_name.name }}</td>
                             <td>{{ ogr.money }}円</td>
-                            {% if ogr.money > 0 %}
-                            <td>貸した</td>
-                            {% else %}
-                            <td>借りた</td>
-                            {% endif %}
                         </tr>
                         {% endfor %}
                     </table>
@@ -109,11 +109,14 @@
                 {% endif %}
             </div>
         </div>
-    </main>
+    </div>
+</div>
 
 
 
 
-    <a class="btn btn-outline-primary" href="{% url 'create_log' %}">記録の追加</a><br /><br />
+
+<div class="text-center">
+    <a class="btn btn-outline-primary" href="{% url 'create_log' %}">記録の追加</a>
+</div><br /><br />
 {% endblock %}
-

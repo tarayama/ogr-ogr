@@ -2,9 +2,9 @@
 {% block content %}
 <section>
     <div>
-        <h3>友人リストに新しく友達を追加する</h3>
+        <h3 class="text-center">友人リストに新しく友達を追加する</h3>
         <br/>
-        <form action="{% url 'addfriend' %}" class="form-horizo​​ntal" method="POST">
+        <form action="{% url 'addfriend' %}" class="form-horizo​​ntal text-center" method="POST">
             {% csrf_token %}
             <div class="table-condensed">
             

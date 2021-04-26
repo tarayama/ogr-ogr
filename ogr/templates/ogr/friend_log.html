@@ -2,17 +2,20 @@
 {% block content %}
 {% if friend %}
     <div class="card border-dark mb-3 control mx-auto w-75">
-        <div class="card-header">{{  friend.name  }}さんとの記録</div>
+        <div class="card-header text-center">{{  friend.name  }}さんとの記録</div>
         <div class="card-body text-dark">
-            <h5 class="card-title"><strong>現在の貸し借り金額 ： {{ totalmoney }}円</strong></h5>
+            <h5 class="card-title text-center"><strong>現在の貸し借り金額 ： {{ totalmoney }}円</strong></h5>
             <p class="card-text"><img src="{% url 'plot' friend.id %}" class="img-fluid rounded mx-auto d-block" alt="{{  friend.name  }}さんとの記録"></p>
             <br/>
         </div>
         <div class="card-footer">
-            <a class="btn btn-info" href="{% url 'top' %}">ホームに戻る</a>
+            <div class="text-center">
+            <a class="btn btn-info text-center" href="{% url 'top' %}">ホームに戻る</a>
+        </div>
         </div>
     </div>
     {% else %}
+
         <p class="card-text">いまだ貸し借りのしたことある人はいません</p>
     {% endif %}
 {% endblock %}
